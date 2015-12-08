@@ -13,6 +13,7 @@ public class Event {
     @InjectLinks({})
     private List<Link> links;
     private String id;
+    private String creator;
     private String title;
     private String location;
     private String notes;
