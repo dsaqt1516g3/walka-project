@@ -20,5 +20,5 @@ public interface UserDAO {
 
     public boolean checkPassword(String id, String password) throws SQLException;
 
-    public String convertMailToId(String email)throws SQLException;
+    public String getIdfromMail(String email)throws SQLException;
 }

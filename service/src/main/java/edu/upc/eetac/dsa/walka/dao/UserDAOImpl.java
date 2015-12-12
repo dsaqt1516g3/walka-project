@@ -212,29 +212,31 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public String convertMailToId(String email) throws SQLException {
+    public String getIdfromMail(String email) throws SQLException {
 
         Connection connection = null;
         PreparedStatement stmt = null;
-
+        String iduser;
         try {
             connection = Database.getConnection();
 
-            stmt = connection.prepareStatement(UserDAOQuery.CONVERT_MAIL_TO_ID);
+            stmt = connection.prepareStatement(UserDAOQuery.GET_MAIL_FROM_ID);
             stmt.setString(1, email);
 
             int rows = stmt.executeUpdate();
 
             ResultSet rs = stmt.executeQuery();
-            String iduser = rs.getString("id");
+            iduser = rs.getString("id");
 
-            return iduser;
+
         } catch (SQLException e) {
             throw e;
         } finally {
             if (stmt != null) stmt.close();
             if (connection != null) connection.close();
         }
+
+        return iduser;
 
     }
 

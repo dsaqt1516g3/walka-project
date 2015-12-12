@@ -1,0 +1,6 @@
+[
+  {
+    "path": "myresource",
+    "methods": ["GET"]
+  }
+]
