@@ -3,7 +3,7 @@ package edu.upc.eetac.dsa.walka.dao;
 /**
  * Created by SergioGM on 07.12.15.
  */
-public class EventDAOQuery {
+public interface EventDAOQuery {
 
     /**OK*/public final static String UUID = "select REPLACE(UUID(),'-','')";
     /**OK*/public final static String CREATE_EVENT = "insert into events (id, title, creator, location, notes, startdate, enddate) values (UNHEX(?), ?, unhex(?), ?, ?, ?, ?)";

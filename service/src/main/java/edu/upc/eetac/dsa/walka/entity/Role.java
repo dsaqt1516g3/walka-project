@@ -6,3 +6,4 @@ package edu.upc.eetac.dsa.walka.entity;
 public enum Role {
     registered
 }
+

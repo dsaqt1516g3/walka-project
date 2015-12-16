@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by SergioGM on 05.12.15.
+ * Created by sergio on 7/09/15.
  */
 public class AuthTokenDAOImpl implements AuthTokenDAO {
     @Override

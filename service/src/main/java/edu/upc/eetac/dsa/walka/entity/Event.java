@@ -20,9 +20,9 @@ public class Event {
     private String title;
     private String location;
     private String notes;
-    private String url = null;
-    private long startdate;
-    private long enddate;
+    private String url;
+    private long start;
+    private long end;
     private long lastModified;
     private long creationTimestamp;
 
@@ -83,19 +83,19 @@ public class Event {
     }
 
     public long getStartdate() {
-        return startdate;
+        return start;
     }
 
     public void setStartdate(long startdate) {
-        this.startdate = startdate;
+        this.start = startdate;
     }
 
     public long getEnddate() {
-        return enddate;
+        return end;
     }
 
     public void setEnddate(long enddate) {
-        this.enddate = enddate;
+        this.end = enddate;
     }
 
     public long getLastModified() {
@@ -113,4 +113,14 @@ public class Event {
     public void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+
 }
