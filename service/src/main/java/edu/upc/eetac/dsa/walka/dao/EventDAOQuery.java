@@ -11,6 +11,7 @@ public interface EventDAOQuery {
    /**Corregir*/public final static String GET_EVENTS_BETWEEN = "SELECT e.* FROM events AS e INNER JOIN user_events AS ue ON e.id = ue.idevent WHERE ue.iduser = unhex(?) AND (e.startdate BETWEEN ? AND ?)";
     /**OK*/public final static String UPDATE_EVENT = "update events set title=?, location=?, notes=?, startdate=?, enddate=? where id=unhex(?)";
     /**OK*/public final static String DELETE_EVENT = "delete from events where id=unhex(?)";
+    public final static String CHECK_USER_IN_EVENT = "select * from user_events where iduser=unhex(?) AND idevent=unhex(?)";
     public final static String DELETE_PARTICIPANTS_EVENT = "delete from user_events where idevent=unhex(?)";
     /**OK*/public final static String JOIN_EVENT = "insert into user_events (idevent, iduser) values (UNHEX(?),unhex(?))";
     /**OK*/public final static String LEAVE_EVENT = "delete from events where idevent=unhex(?) AND iduser=unhex(?)";

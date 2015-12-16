@@ -76,8 +76,8 @@ public class EventDAOImpl implements EventDAO {
                 /**Obtengo participantes de otra clase*/
                 UserCollection participants = userDAO.getParticipantsByEventId(id);
                 event.setParticipants(participants);
-                event.setStartdate(rs.getLong("startdate"));
-                event.setEnddate(rs.getLong("enddate"));
+                event.setStart(rs.getLong("startdate"));
+                event.setEnd(rs.getLong("enddate"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
             }
@@ -112,7 +112,6 @@ public class EventDAOImpl implements EventDAO {
             stmt = connection.prepareStatement(EventDAOQuery.JOIN_EVENT);
             stmt.setString(1, eventid);
             stmt.setString(2, userid);
-
 
             int rows = stmt.executeUpdate();
             return (rows == 1);
@@ -182,7 +181,29 @@ public class EventDAOImpl implements EventDAO {
         return event;
     }
 
+    @Override
+    public boolean checkUserInEvent(String eventid, String userid) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
 
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.CHECK_USER_IN_EVENT);
+            stmt.setString(1, userid);
+            stmt.setString(2, eventid);
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+    }
 
     @Override
     public boolean deleteEvent(String id) throws SQLException {

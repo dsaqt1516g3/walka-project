@@ -38,6 +38,22 @@ public class Event {
         this.creator = creator;
     }
 
+    public long getStart() {
+        return start;
+    }
+
+    public void setStart(long start) {
+        this.start = start;
+    }
+
+    public long getEnd() {
+        return end;
+    }
+
+    public void setEnd(long end) {
+        this.end = end;
+    }
+
     public UserCollection getParticipants() {
         return participants;
     }
@@ -82,21 +98,6 @@ public class Event {
         this.notes = notes;
     }
 
-    public long getStartdate() {
-        return start;
-    }
-
-    public void setStartdate(long startdate) {
-        this.start = startdate;
-    }
-
-    public long getEnddate() {
-        return end;
-    }
-
-    public void setEnddate(long enddate) {
-        this.end = enddate;
-    }
 
     public long getLastModified() {
         return lastModified;

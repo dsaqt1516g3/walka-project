@@ -16,6 +16,7 @@ public interface EventDAO {
     /**Obtener por dia*/
     public EventCollection getEventsDay();
     public boolean JoinEvent(String userid, String eventid) throws SQLException;
+    public boolean checkUserInEvent(String eventid, String userid) throws SQLException;
     public boolean LeaveEvent(String userid, String eventid) throws SQLException;
     public EventCollection getEventsFromTo(long fromData, long toData) throws SQLException;
     public Event updateEvent(String id, String content, String location, String notes, long startDate, long endDate) throws SQLException;
