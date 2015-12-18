@@ -21,8 +21,8 @@ public class Event {
     private String location;
     private String notes;
     private String url;
-    private long start;
-    private long end;
+    private String start;
+    private String end;
     private long lastModified;
     private long creationTimestamp;
 
@@ -38,19 +38,19 @@ public class Event {
         this.creator = creator;
     }
 
-    public long getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(long start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public long getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(long end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 

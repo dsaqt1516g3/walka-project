@@ -25,8 +25,8 @@ public class EventResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(WalkaMediaType.WALKA_EVENT)
-    public Response createEvent(@FormParam("title") String title, @FormParam("location") String location, @FormParam("notes") String notes, @FormParam("start") long start,@FormParam("end") long end, @Context UriInfo uriInfo) throws URISyntaxException {
-            if (title == null ||  start == 0 || end == 0 )
+    public Response createEvent(@FormParam("title") String title, @FormParam("location") String location, @FormParam("notes") String notes, @FormParam("start") String start,@FormParam("end") String end, @Context UriInfo uriInfo) throws URISyntaxException {
+            if (title == null ||  start == null )
                 throw new BadRequestException("Title and start date are mandatory");
             EventDAO eventDAO = new EventDAOImpl();
 
@@ -59,19 +59,23 @@ public class EventResource {
     @Produces(WalkaMediaType.WALKA_EVENT)
     public Response getEvent(@PathParam("id") String id, @Context Request request) {
         // Create cache-control
-        //String userid = securityContext.getUserPrincipal().getName();
+
+        String userid = securityContext.getUserPrincipal().getName();
         CacheControl cacheControl = new CacheControl();
         Event event = null;
         EventDAO eventDAO = new EventDAOImpl();
         try {
+
             //Si el id de evento no existe
             event = eventDAO.getEventbyId(id);
+
             if (event == null)
             throw new NotFoundException("Event with id = " + id + "not found");
 
             //Si no pertenece al evento, no puede obtenerlo
-            //if(!eventDAO.checkUserInEvent(id,userid))
-               // throw new ForbiddenException("operation not allowed");
+
+           if(!eventDAO.checkUserInEvent(id,userid))
+              throw new ForbiddenException("You are not in the event");
 
 
             // Calculate the ETag on last modified date of user resource
@@ -95,6 +99,67 @@ public class EventResource {
             throw new InternalServerErrorException();
         }
     }
+
+    @Path("/{id}")
+    @PUT
+    @Consumes(WalkaMediaType.WALKA_EVENT)
+    @Produces(WalkaMediaType.WALKA_EVENT)
+    public Event updateEvent(@PathParam("id") String id, Event event) {
+        EventDAO eventDAO = new EventDAOImpl();
+        if (event == null)
+            throw new BadRequestException("Entity is null");
+        if (!id.equals(event.getId()))
+            throw new BadRequestException("Path parameter id and entity parameter id doesn't match");
+
+        String userid = securityContext.getUserPrincipal().getName();
+
+        try {
+            event = eventDAO.updateEvent(id, event.getTitle(), event.getLocation(), event.getNotes(), event.getStart(), event.getEnd());
+
+            if (event == null)
+                throw new NotFoundException("Sting with id = " + id + " doesn't exist");
+            //Debe ir filtro de si estas en el evento
+            if(!eventDAO.checkUserInEvent(id, userid))
+                throw new ForbiddenException("You are not in the event");
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return event;
+    }
+
+    @Path("/{id}")
+    @DELETE
+    public void deleteEvent(@PathParam("id") String id) {
+        String userid = securityContext.getUserPrincipal().getName();
+        EventDAO eventDAO = new EventDAOImpl();
+        try {
+
+            String ownerid = eventDAO.getEventbyId(id).getCreator();
+
+            if (!userid.equals(ownerid))
+                throw new ForbiddenException("You are not the creator");
+            if (!eventDAO.deleteEvent(id))
+                throw new NotFoundException("Event with id = " + id + " doesn't exist");
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+    }
+/**
+    @Path("/{id}/participants")
+    @POST
+    @Consumes(WalkaMediaType.WALKA_LOGIN_COLLECTION)
+    @Produces(WalkaMediaType.WALKA_USER_COLLECTION)
+    public UserCollection addParticipantsToEvent(@PathParam("id") String idevent, LoginUsersCollection logins){
+        if (logins == null)
+            throw new BadRequestException("Null participants. Minimum one participant");
+
+
+    }
+*/
+
+
+
 
 
 }

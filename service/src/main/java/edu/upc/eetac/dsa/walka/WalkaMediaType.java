@@ -9,5 +9,6 @@ public class WalkaMediaType {
     public final static String WALKA_USER_COLLECTION = "application/vnd.dsa.walka.user.collection+json";
     public final static String WALKA_EVENT = "application/vnd.dsa.walka.event+json";
     public final static String WALKA_EVENT_COLLECTION = "application/vnd.dsa.walka.event.collection+json";
+    public final static String WALKA_LOGIN_COLLECTION = "application/vnd.dsa.walka.login.collection+json";
     public final static String WALKA_ROOT = "application/vnd.dsa.walka.root+json";
 }

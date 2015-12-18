@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class EventDAOImpl implements EventDAO {
     @Override
-    public Event createEvent(String userid, String title, String location, String notes, long startDate, long endDate) throws SQLException {
+    public Event createEvent(String userid, String title, String location, String notes, String startDate, String endDate) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -35,8 +35,8 @@ public class EventDAOImpl implements EventDAO {
             stmt.setString(3, userid);
             stmt.setString(4, location);
             stmt.setString(5, notes);
-            stmt.setLong(6, startDate);
-            stmt.setLong(7, endDate);
+            stmt.setString(6, startDate);
+            stmt.setString(7, endDate);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw e;
@@ -76,8 +76,8 @@ public class EventDAOImpl implements EventDAO {
                 /**Obtengo participantes de otra clase*/
                 UserCollection participants = userDAO.getParticipantsByEventId(id);
                 event.setParticipants(participants);
-                event.setStart(rs.getLong("startdate"));
-                event.setEnd(rs.getLong("enddate"));
+                event.setStart(rs.getString("startdate"));
+                event.setEnd(rs.getString("enddate"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
             }
@@ -147,12 +147,12 @@ public class EventDAOImpl implements EventDAO {
     }
 
     @Override
-    public EventCollection getEventsFromTo(long fromData, long toData) throws SQLException {
+    public EventCollection getEventsFromTo(String fromData, String toData) throws SQLException {
         return null;
     }
 
     @Override
-    public Event updateEvent(String id, String title, String location, String notes, long startDate, long endDate) throws SQLException {
+    public Event updateEvent(String id, String title, String location, String notes, String startDate, String endDate) throws SQLException {
         Event event = null;
 
         Connection connection = null;
@@ -165,8 +165,8 @@ public class EventDAOImpl implements EventDAO {
             stmt.setString(1, title);
             stmt.setString(2, location);
             stmt.setString(3, notes);
-            stmt.setLong(4, startDate);
-            stmt.setLong(5, endDate);
+            stmt.setString(4, startDate);
+            stmt.setString(5, endDate);
             stmt.setString(6, id);
             int rows = stmt.executeUpdate();
             if (rows == 1)
@@ -193,8 +193,9 @@ public class EventDAOImpl implements EventDAO {
             stmt.setString(1, userid);
             stmt.setString(2, eventid);
 
-            int rows = stmt.executeUpdate();
-            return (rows == 1);
+            ResultSet rs= stmt.executeQuery();
+
+            return  (rs.next());
 
         } catch (SQLException e) {
             throw e;
