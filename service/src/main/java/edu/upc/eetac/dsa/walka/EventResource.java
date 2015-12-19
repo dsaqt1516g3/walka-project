@@ -2,8 +2,11 @@ package edu.upc.eetac.dsa.walka;
 
 import edu.upc.eetac.dsa.walka.dao.EventDAO;
 import edu.upc.eetac.dsa.walka.dao.EventDAOImpl;
+import edu.upc.eetac.dsa.walka.dao.UserDAO;
+import edu.upc.eetac.dsa.walka.dao.UserDAOImpl;
 import edu.upc.eetac.dsa.walka.entity.AuthToken;
 import edu.upc.eetac.dsa.walka.entity.Event;
+import edu.upc.eetac.dsa.walka.entity.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -133,31 +136,150 @@ public class EventResource {
     public void deleteEvent(@PathParam("id") String id) {
         String userid = securityContext.getUserPrincipal().getName();
         EventDAO eventDAO = new EventDAOImpl();
+        Event event = null;
+        System.out.println("He entrado");
+        System.out.println(userid);
         try {
 
-            String ownerid = eventDAO.getEventbyId(id).getCreator();
+            event = eventDAO.getEventbyId(id);
+            String creator = event.getCreator();
+            System.out.println(creator);
 
-            if (!userid.equals(ownerid))
+            if (event == null)
+                throw new NotFoundException("Event with id = " + id + "not found");
+
+            if (!userid.equals(creator))
                 throw new ForbiddenException("You are not the creator");
+
+            if(!eventDAO.deleteParticipants(id))
+                throw new NotFoundException("Internal error");
+
             if (!eventDAO.deleteEvent(id))
-                throw new NotFoundException("Event with id = " + id + " doesn't exist");
+                throw new NotFoundException("Couldn't delete event:  " + id);
+
+
+
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }
     }
+
+    //Obtener participantes de evento
+
+    //Dejar evento
+    @Path("/{id}/participant")
+    @DELETE
+    public void leaveEvent(@PathParam("id") String id){
+        String userid = securityContext.getUserPrincipal().getName();
+        EventDAO eventDAO = new EventDAOImpl();
+        Event event = null;
+
+        try {
+
+            event = eventDAO.getEventbyId(id);
+            String creator = event.getCreator();
+            System.out.println(userid);
+            System.out.println(id);
+
+            if (event == null)
+                throw new NotFoundException("Event with id = " + id + " not found");
+
+            if(!eventDAO.checkUserInEvent(id, userid))
+                throw new ForbiddenException("You are not in the event");
+
+            if (userid.equals(creator))
+                throw new ForbiddenException("Cannot leave the event if you are the creator. Delete it");
+
+            if (!eventDAO.LeaveEvent(userid,id))
+                throw new NotFoundException("Couldn't leave event:  " + id);
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+    }
+
+    //Add user to event
+    @Path("/{id}/participant")
+    @POST
+    @Produces(WalkaMediaType.WALKA_USER)
+    public User addUserToEvent(@PathParam("id") String id, @FormParam("iduser") String userlogin){
+        String userid = securityContext.getUserPrincipal().getName();
+        EventDAO eventDAO = new EventDAOImpl();
+        UserDAO userDAO = new UserDAOImpl();
+        Event event = null;
+        User user = null;
+
+        try {
+
+            event = eventDAO.getEventbyId(id);
+            String creator = event.getCreator();
+            user = userDAO.getUserByLoginid(userlogin);
+
+
+            if (event == null)
+                throw new NotFoundException("Event with id = " + id + " not found");
+            if (user == null)
+                throw new NotFoundException("User with login = " + userlogin + " doesn't exists");
+
+            if (!userid.equals(creator))
+                throw new ForbiddenException("Only the creator can add participants");
+
+            if (!eventDAO.JoinEvent(user.getId(), id))
+                throw new NotFoundException("Couldn't add participant to event, probably the user is already in the event: " + id);
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+
+        return user;
+
+
+    }
+
+
 /**
     @Path("/{id}/participants")
     @POST
     @Consumes(WalkaMediaType.WALKA_LOGIN_COLLECTION)
     @Produces(WalkaMediaType.WALKA_USER_COLLECTION)
     public UserCollection addParticipantsToEvent(@PathParam("id") String idevent, LoginUsersCollection logins){
-        if (logins == null)
-            throw new BadRequestException("Null participants. Minimum one participant");
+        String userid = securityContext.getUserPrincipal().getName();
+        UserDAO userDAO = new UserDAOImpl();
+        EventDAO eventDAO = new EventDAOImpl();
+        UserCollection participantsAdded;
+        Event event = null;
+        try {
+
+            event = eventDAO.getEventbyId(idevent);
+            String creator = event.getCreator();
+
+            if (event == null)
+                throw new NotFoundException("Event with id = " + idevent + "not found");
+
+            if (!userid.equals(creator))
+                throw new ForbiddenException("Only the creator can add participants");
+
+            for(String login: )){
+
+
+            }
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+
+
 
 
     }
-*/
 
+*/
 
 
 

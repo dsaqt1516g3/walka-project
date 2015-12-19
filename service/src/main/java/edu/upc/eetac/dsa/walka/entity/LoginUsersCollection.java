@@ -9,6 +9,8 @@ import java.util.List;
 public class LoginUsersCollection {
     private List<String> loginids = new ArrayList<>();
 
+
+
     public List<String> getLoginids() {
         return loginids;
     }

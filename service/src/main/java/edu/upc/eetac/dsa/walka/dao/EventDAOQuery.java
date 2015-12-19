@@ -14,5 +14,5 @@ public interface EventDAOQuery {
     public final static String CHECK_USER_IN_EVENT = "select * from user_events where iduser=unhex(?) AND idevent=unhex(?)";
     public final static String DELETE_PARTICIPANTS_EVENT = "delete from user_events where idevent=unhex(?)";
     /**OK*/public final static String JOIN_EVENT = "insert into user_events (idevent, iduser) values (UNHEX(?),unhex(?))";
-    /**OK*/public final static String LEAVE_EVENT = "delete from events where idevent=unhex(?) AND iduser=unhex(?)";
+    /**OK*/public final static String LEAVE_EVENT = "delete from user_events where idevent=unhex(?) AND iduser=unhex(?)";
 }
