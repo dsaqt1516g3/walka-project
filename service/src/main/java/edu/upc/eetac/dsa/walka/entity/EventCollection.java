@@ -14,8 +14,8 @@ import java.util.List;
 public class EventCollection {
     @InjectLinks({})
     private List<Link> links;
-    private long fromDate;
-    private long toDate;
+    private String fromDate;
+    private String toDate;
     private List<Event> events = new ArrayList<>();
 
     public List<Link> getLinks() {
@@ -26,19 +26,19 @@ public class EventCollection {
         this.links = links;
     }
 
-    public long getFromDate() {
+    public String getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(long fromDate) {
+    public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
 
-    public long getToDate() {
+    public String getToDate() {
         return toDate;
     }
 
-    public void setToDate(long toDate) {
+    public void setToDate(String toDate) {
         this.toDate = toDate;
     }
 

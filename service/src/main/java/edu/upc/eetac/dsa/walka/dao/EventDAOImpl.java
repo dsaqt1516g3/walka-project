@@ -91,6 +91,7 @@ public class EventDAOImpl implements EventDAO {
         return event;
     }
 
+    //Obtiene todos los eventos de un usuario en un cierto mes
     @Override
     public EventCollection getEventsMonth(String iduser, String monthDate) throws SQLException {
         EventCollection eventCollection = new EventCollection();
@@ -134,7 +135,7 @@ public class EventDAOImpl implements EventDAO {
         }
         return eventCollection;
     }
-
+    //Obtiene eventos de un usuario en un cierto dia
     @Override
     public EventCollection getEventsDay(String iduser, String dayDate) throws SQLException {
         EventCollection eventCollection = new EventCollection();
@@ -179,6 +180,7 @@ public class EventDAOImpl implements EventDAO {
         return eventCollection;
     }
 
+    //Obtiene todos los eventos del usuario
     @Override
     public EventCollection getAllEvents(String iduser) throws SQLException {
         EventCollection eventCollection = new EventCollection();
@@ -236,7 +238,7 @@ public class EventDAOImpl implements EventDAO {
         return eventCollection;
     }
 
-
+    //Solo el creador de evento puede añadir participantes
     @Override
     public boolean JoinEvent(String userid, String eventid) throws SQLException{
         Connection connection = null;
@@ -258,7 +260,7 @@ public class EventDAOImpl implements EventDAO {
         }
     }
 
-
+    //Cualquier participante puede dejar el evento, excepto el creador, que no puede dejar el evento.
     @Override
     public boolean LeaveEvent(String userid, String eventid) throws SQLException{
         Connection connection = null;
@@ -341,6 +343,7 @@ public class EventDAOImpl implements EventDAO {
 
     }
 
+    //Solo puede eliminar un evento su creador
     @Override
     public boolean deleteEvent(String id) throws SQLException {
         Connection connection = null;

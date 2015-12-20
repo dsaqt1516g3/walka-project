@@ -165,7 +165,6 @@ public class EventResource {
         }
     }
 
-    //Obtener participantes de evento
 
     //Dejar evento
     @Path("/{id}/participant")
@@ -191,7 +190,7 @@ public class EventResource {
             if (userid.equals(creator))
                 throw new ForbiddenException("Cannot leave the event if you are the creator. Delete it");
 
-            if (!eventDAO.LeaveEvent(userid,id))
+            if (!eventDAO.LeaveEvent(userid, id))
                 throw new NotFoundException("Couldn't leave event:  " + id);
 
 
@@ -257,6 +256,8 @@ public class EventResource {
         }
         return eventCollection;
     }
+
+
 
 /**
 
