@@ -11,10 +11,11 @@ import java.sql.SQLException;
 public interface EventDAO {
     public Event createEvent(String userid, String title, String location, String notes, String startDate, String endDate) throws SQLException;
     public Event getEventbyId(String id) throws SQLException;
-    /**Obtener por mes, envio primer dia de mes y me devuelve el intervalo de un mes ¿?*/
-    public EventCollection getEventsMonth();
+    /**Obtener por mes, envio primer dia de mes y me devuelve el intervalo de un mes*/
+    public EventCollection getEventsMonth(String iduser, String monthDate) throws SQLException;
     /**Obtener por dia*/
-    public EventCollection getEventsDay();
+    public EventCollection getEventsDay(String iduser, String dayDate) throws SQLException;
+    public EventCollection getAllEvents(String iduser) throws SQLException;
     public boolean JoinEvent(String userid, String eventid) throws SQLException;
     public boolean checkUserInEvent(String eventid, String userid) throws SQLException;
     public boolean LeaveEvent(String userid, String eventid) throws SQLException;

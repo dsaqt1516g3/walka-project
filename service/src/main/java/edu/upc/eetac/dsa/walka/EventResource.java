@@ -6,6 +6,7 @@ import edu.upc.eetac.dsa.walka.dao.UserDAO;
 import edu.upc.eetac.dsa.walka.dao.UserDAOImpl;
 import edu.upc.eetac.dsa.walka.entity.AuthToken;
 import edu.upc.eetac.dsa.walka.entity.Event;
+import edu.upc.eetac.dsa.walka.entity.EventCollection;
 import edu.upc.eetac.dsa.walka.entity.User;
 
 import javax.ws.rs.*;
@@ -240,8 +241,25 @@ public class EventResource {
 
     }
 
+    //Get all events from user
+    @GET
+    @Produces(WalkaMediaType.WALKA_EVENT_COLLECTION)
+    public EventCollection getEventsUser(){
+
+        EventCollection eventCollection;
+        EventDAO eventDAO = new EventDAOImpl();
+        String userid = securityContext.getUserPrincipal().getName();
+
+        try {
+            eventCollection = eventDAO.getAllEvents(userid);
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return eventCollection;
+    }
 
 /**
+
     @Path("/{id}/participants")
     @POST
     @Consumes(WalkaMediaType.WALKA_LOGIN_COLLECTION)
@@ -265,22 +283,15 @@ public class EventResource {
 
             for(String login: )){
 
-
             }
-
-
 
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }
 
-
-
-
     }
 
 */
-
 
 
 

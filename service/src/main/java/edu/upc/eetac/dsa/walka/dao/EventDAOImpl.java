@@ -5,10 +5,9 @@ import edu.upc.eetac.dsa.walka.entity.Event;
 import edu.upc.eetac.dsa.walka.entity.EventCollection;
 import edu.upc.eetac.dsa.walka.entity.UserCollection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 /**
  * Created by SergioGM on 07.12.15.
@@ -73,6 +72,7 @@ public class EventDAOImpl implements EventDAO {
                 event.setTitle(rs.getString("title"));
                 event.setCreator(rs.getString("creator"));
                 event.setLocation(rs.getString("location"));
+                event.setNotes(rs.getString("notes"));
                 /**Obtengo participantes de otra clase*/
                 UserCollection participants = userDAO.getParticipantsByEventId(id);
                 event.setParticipants(participants);
@@ -92,15 +92,150 @@ public class EventDAOImpl implements EventDAO {
     }
 
     @Override
-    public EventCollection getEventsMonth() {
-        return null;
-    }
+    public EventCollection getEventsMonth(String iduser, String monthDate) throws SQLException {
+        EventCollection eventCollection = new EventCollection();
 
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.GET_EVENTS_BY_MONTH);
+            stmt.setString(1, iduser);
+            stmt.setString(2, monthDate);
+            stmt.setString(3, monthDate);
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event();
+
+                event.setId(rs.getString("id"));
+                event.setTitle(rs.getString("title"));
+                event.setCreator(rs.getString("creator"));
+                event.setLocation(rs.getString("location"));
+                /**Obtengo participantes de otra clase*/
+                UserCollection participants = userDAO.getParticipantsByEventId(event.getId());
+                event.setParticipants(participants);
+                event.setStart(rs.getString("startdate"));
+                event.setEnd(rs.getString("enddate"));
+                event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                event.setLastModified(rs.getTimestamp("last_modified").getTime());
+
+                eventCollection.getEvents().add(event);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return eventCollection;
+    }
 
     @Override
-    public EventCollection getEventsDay() {
-        return null;
+    public EventCollection getEventsDay(String iduser, String dayDate) throws SQLException {
+        EventCollection eventCollection = new EventCollection();
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.GET_EVENTS_BY_DAY);
+            stmt.setString(1, iduser);
+            stmt.setString(2, dayDate);
+            stmt.setString(3, dayDate);
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event();
+
+                event.setId(rs.getString("id"));
+                event.setTitle(rs.getString("title"));
+                event.setCreator(rs.getString("creator"));
+                event.setLocation(rs.getString("location"));
+                /**Obtengo participantes de otra clase*/
+                UserCollection participants = userDAO.getParticipantsByEventId(event.getId());
+                event.setParticipants(participants);
+                event.setStart(rs.getString("startdate"));
+                event.setEnd(rs.getString("enddate"));
+                event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                event.setLastModified(rs.getTimestamp("last_modified").getTime());
+
+                eventCollection.getEvents().add(event);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return eventCollection;
     }
+
+    @Override
+    public EventCollection getAllEvents(String iduser) throws SQLException {
+        EventCollection eventCollection = new EventCollection();
+        Event event = null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.GET_EVENTS_BY_USERID);
+            stmt.setString(1,iduser);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                event = new Event();
+
+                event.setId(rs.getString("id"));
+                System.out.println(event.getId());
+                event.setTitle(rs.getString("title"));
+                System.out.println(event.getTitle());
+                event.setCreator(rs.getString("creator"));
+                System.out.println(event.getCreator());
+                event.setLocation(rs.getString("location"));
+                System.out.println(event.getLocation());
+                event.setNotes(rs.getString("notes"));
+                System.out.println(event.getNotes());
+                /**Obtengo participantes de otra clase*/
+                UserCollection participants = userDAO.getParticipantsByEventId(event.getId());
+                event.setParticipants(participants);
+                event.setStart(rs.getString("startdate"));
+                System.out.println(event.getStart());
+                event.setEnd(rs.getString("enddate"));
+                System.out.println(event.getEnd());
+                event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                //Creación url
+                PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
+                String baseURI = prb.getString("walka.eventsurl");
+                String eventurl = baseURI + "/" + event.getId();
+                event.setUrl(eventurl);
+                event.setLastModified(rs.getTimestamp("last_modified").getTime());
+
+
+                eventCollection.getEvents().add(event);
+
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return eventCollection;
+    }
+
 
     @Override
     public boolean JoinEvent(String userid, String eventid) throws SQLException{
