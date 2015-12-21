@@ -14,6 +14,7 @@ public interface EventDAO {
     /**Obtener por mes, envio primer dia de mes y me devuelve el intervalo de un mes*/
     public EventCollection getEventsMonth(String iduser, String monthDate) throws SQLException;
     /**Obtener por dia*/
+    public EventCollection getEventsBetween(String iduser, String start, String end) throws SQLException;
     public EventCollection getEventsDay(String iduser, String dayDate) throws SQLException;
     public EventCollection getAllEvents(String iduser) throws SQLException;
     public boolean JoinEvent(String userid, String eventid) throws SQLException;

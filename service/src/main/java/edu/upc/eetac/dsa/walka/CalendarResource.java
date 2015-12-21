@@ -42,6 +42,24 @@ public class CalendarResource {
     //Obtener por dia
     }
 
+    @Path("/between")
+    @GET
+    @Produces(WalkaMediaType.WALKA_EVENT_COLLECTION)
+    public EventCollection getEventsBetween(@QueryParam("start") String startD, @QueryParam("end") String endD){
+        EventCollection eventCollection;
+        EventDAO eventDAO = new EventDAOImpl();
+        String userid = securityContext.getUserPrincipal().getName();
+
+        try {
+            eventCollection = eventDAO.getEventsBetween(userid,startD,endD);
+            eventCollection.setFromDate(startD);
+            eventCollection.setToDate(endD);
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return eventCollection;
+    }
+
 
     @Path("/day")
     @GET

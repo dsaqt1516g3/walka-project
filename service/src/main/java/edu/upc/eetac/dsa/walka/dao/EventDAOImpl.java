@@ -238,6 +238,50 @@ public class EventDAOImpl implements EventDAO {
         return eventCollection;
     }
 
+    @Override
+    public EventCollection getEventsBetween(String iduser, String start, String end) throws SQLException {
+        EventCollection eventCollection = new EventCollection();
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.GET_EVENTS_BETWEEN);
+            stmt.setString(1, iduser);
+            stmt.setString(2, start);
+            stmt.setString(3, end);
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event();
+
+                event.setId(rs.getString("id"));
+                event.setTitle(rs.getString("title"));
+                event.setCreator(rs.getString("creator"));
+                event.setLocation(rs.getString("location"));
+                /**Obtengo participantes de otra clase*/
+                UserCollection participants = userDAO.getParticipantsByEventId(event.getId());
+                event.setParticipants(participants);
+                event.setStart(rs.getString("startdate"));
+                event.setEnd(rs.getString("enddate"));
+                event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                event.setLastModified(rs.getTimestamp("last_modified").getTime());
+
+                eventCollection.getEvents().add(event);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return eventCollection;
+    }
+
     //Solo el creador de evento puede añadir participantes
     @Override
     public boolean JoinEvent(String userid, String eventid) throws SQLException{

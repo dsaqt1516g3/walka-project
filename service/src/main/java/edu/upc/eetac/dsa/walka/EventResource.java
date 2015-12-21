@@ -283,8 +283,6 @@ public class EventResource {
     }
 
 
-
-
     //Get all events from user
     @GET
     @Produces(WalkaMediaType.WALKA_EVENT_COLLECTION)
