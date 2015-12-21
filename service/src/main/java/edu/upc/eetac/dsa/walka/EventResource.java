@@ -200,7 +200,7 @@ public class EventResource {
     }
 
     //Add user to event
-    @Path("/{id}/participant")
+    @Path("/{id}/participant/add")
     @POST
     @Produces(WalkaMediaType.WALKA_USER)
     public User addUserToEvent(@PathParam("id") String id, @FormParam("iduser") String userlogin){
@@ -238,6 +238,52 @@ public class EventResource {
 
 
     }
+
+    @Path("{id}/participant/del/{loginuser}")
+    @DELETE
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteUserFromEvent(@PathParam("id") String id, @PathParam("loginuser") String userlogin){
+
+        String userid = securityContext.getUserPrincipal().getName();
+        EventDAO eventDAO = new EventDAOImpl();
+        Event event = null;
+        UserDAO userDAO = new UserDAOImpl();
+        User user = null;
+
+        try {
+
+            event = eventDAO.getEventbyId(id);
+            String creator = event.getCreator();
+            System.out.println("Tu "+userid);
+            System.out.println("Evento" + id);
+            user = userDAO.getUserByLoginid(userlogin);
+            String iduserTodelete = user.getId();
+
+
+
+            System.out.println("User a borrar " + userlogin);
+
+            if (event == null)
+                throw new NotFoundException("Event with id = " + id + " not found");
+
+            if(!eventDAO.checkUserInEvent(id, userid))
+                throw new ForbiddenException("You are not in the event");
+
+            if (!userid.equals(creator))
+                throw new ForbiddenException("Only the creator can delete participants");
+
+            if (!eventDAO.LeaveEvent(iduserTodelete, id))
+                throw new NotFoundException("Couldn't delete participant with id: " + id);
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+    }
+
+
+
 
     //Get all events from user
     @GET
