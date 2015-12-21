@@ -18,7 +18,7 @@ public class CalendarResource {
     private SecurityContext securityContext;
 
 
-
+    //Obtener por mes
     @Path("/month")
     @GET
     @Produces(WalkaMediaType.WALKA_EVENT_COLLECTION)
@@ -39,7 +39,10 @@ public class CalendarResource {
         }
         return eventCollection;
 
+    //Obtener por dia
     }
+
+
     @Path("/day")
     @GET
     @Produces(WalkaMediaType.WALKA_EVENT_COLLECTION)

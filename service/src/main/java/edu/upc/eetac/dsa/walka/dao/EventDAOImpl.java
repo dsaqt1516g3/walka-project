@@ -348,6 +348,7 @@ public class EventDAOImpl implements EventDAO {
     public boolean deleteEvent(String id) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
+        System.out.println("Holaa");
         try {
             connection = Database.getConnection();
 

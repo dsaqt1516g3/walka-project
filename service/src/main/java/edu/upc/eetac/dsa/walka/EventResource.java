@@ -135,16 +135,20 @@ public class EventResource {
     @Path("/{id}")
     @DELETE
     public void deleteEvent(@PathParam("id") String id) {
+        System.out.println(id);
         String userid = securityContext.getUserPrincipal().getName();
         EventDAO eventDAO = new EventDAOImpl();
         Event event = null;
         System.out.println("He entrado");
         System.out.println(userid);
+
+
         try {
 
             event = eventDAO.getEventbyId(id);
             String creator = event.getCreator();
             System.out.println(creator);
+
 
             if (event == null)
                 throw new NotFoundException("Event with id = " + id + "not found");
@@ -152,13 +156,8 @@ public class EventResource {
             if (!userid.equals(creator))
                 throw new ForbiddenException("You are not the creator");
 
-            if(!eventDAO.deleteParticipants(id))
-                throw new NotFoundException("Internal error");
-
-            if (!eventDAO.deleteEvent(id))
+            if (!eventDAO.deleteEvent(event.getId()))
                 throw new NotFoundException("Couldn't delete event:  " + id);
-
-
 
         } catch (SQLException e) {
             throw new InternalServerErrorException();
