@@ -46,6 +46,7 @@ public class EventResource {
                 String baseURI = prb.getString("walka.eventsurl");
                 String eventurl = baseURI + "/" +id;
                 event.setUrl(eventurl);
+                System.out.println(eventurl);
                 //Introduzco en user_events
                 eventDAO.JoinEvent(securityContext.getUserPrincipal().getName(), event.getId());
 

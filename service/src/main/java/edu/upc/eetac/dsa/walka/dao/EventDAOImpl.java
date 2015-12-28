@@ -124,7 +124,10 @@ public class EventDAOImpl implements EventDAO {
                 event.setEnd(rs.getString("enddate"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
-
+                PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
+                String baseURI = prb.getString("walka.eventsurl");
+                String eventurl = baseURI + "/" + rs.getString("id");
+                event.setUrl(eventurl);
                 eventCollection.getEvents().add(event);
             }
         } catch (SQLException e) {
@@ -168,7 +171,10 @@ public class EventDAOImpl implements EventDAO {
                 event.setEnd(rs.getString("enddate"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
-
+                PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
+                String baseURI = prb.getString("walka.eventsurl");
+                String eventurl = baseURI + "/" + rs.getString("id");
+                event.setUrl(eventurl);
                 eventCollection.getEvents().add(event);
             }
         } catch (SQLException e) {
@@ -270,6 +276,10 @@ public class EventDAOImpl implements EventDAO {
                 event.setEnd(rs.getString("enddate"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
+                PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
+                String baseURI = prb.getString("walka.eventsurl");
+                String eventurl = baseURI + "/" + rs.getString("id");
+                event.setUrl(eventurl);
 
                 eventCollection.getEvents().add(event);
             }
