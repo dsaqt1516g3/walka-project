@@ -14,7 +14,15 @@ import java.util.ResourceBundle;
  */
 public class EventDAOImpl implements EventDAO {
     @Override
-    public Event createEvent(String userid, String title, String location, String notes, String startDate, String endDate) throws SQLException {
+    public Event createEvent(String userid, String title, String location, String notes, String tag, String startDate, String endDate) throws SQLException {
+
+        System.out.println("He entrado");
+        System.out.println(title);
+        System.out.println(tag);
+        System.out.println(location);
+        System.out.println(notes);
+        System.out.println(startDate);
+        System.out.println(endDate);
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -36,7 +44,9 @@ public class EventDAOImpl implements EventDAO {
             stmt.setString(5, notes);
             stmt.setString(6, startDate);
             stmt.setString(7, endDate);
+            stmt.setString(8, tag);
             stmt.executeUpdate();
+
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -78,6 +88,7 @@ public class EventDAOImpl implements EventDAO {
                 event.setParticipants(participants);
                 event.setStart(rs.getString("startdate"));
                 event.setEnd(rs.getString("enddate"));
+                event.setTag(rs.getString("tag"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
             }
@@ -122,6 +133,7 @@ public class EventDAOImpl implements EventDAO {
                 event.setParticipants(participants);
                 event.setStart(rs.getString("startdate"));
                 event.setEnd(rs.getString("enddate"));
+                event.setTag(rs.getString("tag"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
@@ -169,6 +181,7 @@ public class EventDAOImpl implements EventDAO {
                 event.setParticipants(participants);
                 event.setStart(rs.getString("startdate"));
                 event.setEnd(rs.getString("enddate"));
+                event.setTag(rs.getString("tag"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
@@ -223,6 +236,7 @@ public class EventDAOImpl implements EventDAO {
                 System.out.println(event.getStart());
                 event.setEnd(rs.getString("enddate"));
                 System.out.println(event.getEnd());
+                event.setTag(rs.getString("tag"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 //Creación url
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
@@ -276,6 +290,7 @@ public class EventDAOImpl implements EventDAO {
                 event.setEnd(rs.getString("enddate"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
+                event.setTag(rs.getString("tag"));
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
                 String baseURI = prb.getString("walka.eventsurl");
                 String eventurl = baseURI + "/" + rs.getString("id");
@@ -337,10 +352,6 @@ public class EventDAOImpl implements EventDAO {
         }
     }
 
-    @Override
-    public EventCollection getEventsFromTo(String fromData, String toData) throws SQLException {
-        return null;
-    }
 
     @Override
     public Event updateEvent(String id, String title, String location, String notes, String startDate, String endDate) throws SQLException {
@@ -438,4 +449,62 @@ public class EventDAOImpl implements EventDAO {
             if (connection != null) connection.close();
         }
     }
+
+    @Override
+    public boolean modifyColour(String colour, String idevent, String iduser) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.MODIFY_COLOUR);
+            stmt.setString(1, colour);
+            stmt.setString(1, idevent);
+            stmt.setString(1, iduser);
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public String getColour(String idevent, String iduser) throws SQLException {
+        String colour = null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.GET_COLOUR);
+
+            stmt.setString(1, idevent);
+            stmt.setString(2, iduser);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                colour = rs.getString("colour");
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+        return colour;
+    }
+
 }
+
+
+
+
+
+
+

@@ -29,18 +29,24 @@ public class EventResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(WalkaMediaType.WALKA_EVENT)
-    public Response createEvent(@FormParam("title") String title, @FormParam("location") String location, @FormParam("notes") String notes, @FormParam("start") String start,@FormParam("end") String end, @Context UriInfo uriInfo) throws URISyntaxException {
+    public Response createEvent(@FormParam("title") String title, @FormParam("location") String location, @FormParam("notes") String notes, @FormParam("start") String start,@FormParam("end") String end, @FormParam("tag") String tag , @Context UriInfo uriInfo) throws URISyntaxException {
             if (title == null ||  start == null )
-                throw new BadRequestException("Title and start date are mandatory");
+                throw new BadRequestException("Title, start and end date are mandatory");
             EventDAO eventDAO = new EventDAOImpl();
 
             Event event  = null;
             AuthToken authToken = null;
-
+            System.out.println(title);
+            System.out.println(tag);
+            System.out.println(location);
+            System.out.println(notes);
+            System.out.println(start);
+            System.out.println(end);
 
             try {
-                event = eventDAO.createEvent(securityContext.getUserPrincipal().getName(), title, location, notes, start, end);
+                event = eventDAO.createEvent(securityContext.getUserPrincipal().getName(), title, location, notes, tag, start, end);
                 String id = event.getId();
+                System.out.println(id);
                 //Genero url
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
                 String baseURI = prb.getString("walka.eventsurl");
@@ -226,8 +232,12 @@ public class EventResource {
             if (!userid.equals(creator))
                 throw new ForbiddenException("Only the creator can add participants");
 
+            if(eventDAO.checkUserInEvent(id, user.getId()))
+                throw new ForbiddenException("The user is already in the event");
+
+
             if (!eventDAO.JoinEvent(user.getId(), id))
-                throw new NotFoundException("Couldn't add participant to event, probably the user is already in the event: " + id);
+                throw new NotFoundException("Couldn't add participant to event: " + id);
 
 
 

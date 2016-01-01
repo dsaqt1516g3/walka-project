@@ -1,6 +1,9 @@
 package edu.upc.eetac.dsa.walka.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import edu.upc.eetac.dsa.walka.*;
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
@@ -12,7 +15,18 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Event {
 
-    @InjectLinks({})
+    @InjectLinks({
+            @InjectLink(resource = WalkaRootAPIResource.class, style = InjectLink.Style.ABSOLUTE, rel = "home", title = "Walka Root API"),
+            @InjectLink(resource = LoginResource.class, style = InjectLink.Style.ABSOLUTE, rel = "logout", title = "Logout"),
+            @InjectLink(resource = EventResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-event", title = "Create event", type= WalkaMediaType.WALKA_EVENT),
+            @InjectLink(resource = EventResource.class, method = "getEvent", style = InjectLink.Style.ABSOLUTE, rel = "self event", title = "Event", bindings = @Binding(name = "id", value = "${instance.id}")),
+            @InjectLink(resource = EventResource.class, method = "getEvent", style = InjectLink.Style.ABSOLUTE, rel = "edit-event", title = "Edit Event", bindings = @Binding(name = "id", value = "${instance.id}"))
+            //@InjectLink(resource = UserResource.class, method="getUser", style = InjectLink.Style.ABSOLUTE, rel = "user-profile", title = "User profile", condition="${!empty instance.userid}", type= WalkaMediaType.WALKA_USER, bindings = @Binding(name = "id", value = "${instance.userid}"))
+
+
+
+
+    })
     private List<Link> links;
     private String id;
     private String creator;
@@ -20,6 +34,8 @@ public class Event {
     private String title;
     private String location;
     private String notes;
+    private String tag;
+    private String colour;
     private String url;
     private String start;
     private String end;
@@ -98,6 +114,21 @@ public class Event {
         this.notes = notes;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
 
     public long getLastModified() {
         return lastModified;

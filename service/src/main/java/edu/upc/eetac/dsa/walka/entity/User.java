@@ -1,6 +1,9 @@
 package edu.upc.eetac.dsa.walka.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import edu.upc.eetac.dsa.walka.*;
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
@@ -12,7 +15,15 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
-        @InjectLinks({})
+        @InjectLinks({@InjectLink(resource = WalkaRootAPIResource.class, style = InjectLink.Style.ABSOLUTE, rel = "home", title = "Walka Root API"),
+                @InjectLink(resource = LoginResource.class, style = InjectLink.Style.ABSOLUTE, rel = "logout", title = "Logout"),
+                @InjectLink(resource = UserResource.class, method = "getUser", style = InjectLink.Style.ABSOLUTE, rel = "self user-profile", title = "User profile", type= WalkaMediaType.WALKA_USER, bindings = @Binding(name = "id", value = "${instance.id}")),
+                @InjectLink(resource = EventResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-event", title = "Create event", type=WalkaMediaType.WALKA_EVENT),
+                @InjectLink(resource = CalendarResource.class, style = InjectLink.Style.ABSOLUTE, rel = "fill-calendar", title = "Events calendar", type= WalkaMediaType.WALKA_EVENT_COLLECTION),
+                @InjectLink(resource = EventResource.class, method = "getEvent", style = InjectLink.Style.ABSOLUTE, rel = "self event", title = "Event", bindings = @Binding(name = "id", value = "${instance.id}"))
+
+
+        })
         private List<Link> links;
         private String id;
         private String loginid;
