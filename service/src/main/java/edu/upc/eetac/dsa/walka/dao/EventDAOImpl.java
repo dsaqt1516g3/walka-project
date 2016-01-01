@@ -47,6 +47,9 @@ public class EventDAOImpl implements EventDAO {
             stmt.setString(8, tag);
             stmt.executeUpdate();
 
+
+
+
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -91,7 +94,10 @@ public class EventDAOImpl implements EventDAO {
                 event.setTag(rs.getString("tag"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
+
             }
+
+
 
         } catch (SQLException e) {
             throw e;
@@ -291,10 +297,12 @@ public class EventDAOImpl implements EventDAO {
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
                 event.setTag(rs.getString("tag"));
+                event.setColour(getColour(event.getId(), iduser));
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
                 String baseURI = prb.getString("walka.eventsurl");
                 String eventurl = baseURI + "/" + rs.getString("id");
                 event.setUrl(eventurl);
+
 
                 eventCollection.getEvents().add(event);
             }
@@ -354,7 +362,7 @@ public class EventDAOImpl implements EventDAO {
 
 
     @Override
-    public Event updateEvent(String id, String title, String location, String notes, String startDate, String endDate) throws SQLException {
+    public Event updateEvent(String id, String title, String location, String notes, String tag, String startDate, String endDate) throws SQLException {
         Event event = null;
 
         Connection connection = null;
@@ -367,9 +375,10 @@ public class EventDAOImpl implements EventDAO {
             stmt.setString(1, title);
             stmt.setString(2, location);
             stmt.setString(3, notes);
-            stmt.setString(4, startDate);
-            stmt.setString(5, endDate);
-            stmt.setString(6, id);
+            stmt.setString(4, tag);
+            stmt.setString(5, startDate);
+            stmt.setString(6, endDate);
+            stmt.setString(7, id);
             int rows = stmt.executeUpdate();
             if (rows == 1)
                 event = getEventbyId(id);
@@ -459,8 +468,8 @@ public class EventDAOImpl implements EventDAO {
 
             stmt = connection.prepareStatement(EventDAOQuery.MODIFY_COLOUR);
             stmt.setString(1, colour);
-            stmt.setString(1, idevent);
-            stmt.setString(1, iduser);
+            stmt.setString(2, idevent);
+            stmt.setString(3, iduser);
 
             int rows = stmt.executeUpdate();
             return (rows == 1);

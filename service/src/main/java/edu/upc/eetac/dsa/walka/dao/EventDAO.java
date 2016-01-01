@@ -20,7 +20,7 @@ public interface EventDAO {
     public boolean JoinEvent(String userid, String eventid) throws SQLException;
     public boolean checkUserInEvent(String eventid, String userid) throws SQLException;
     public boolean LeaveEvent(String userid, String eventid) throws SQLException;
-    public Event updateEvent(String id, String content, String location, String notes, String startDate, String endDate) throws SQLException;
+    public Event updateEvent(String id, String content, String location, String notes,String tag, String startDate, String endDate) throws SQLException;
     public boolean deleteEvent(String id) throws SQLException;
     public boolean deleteParticipants(String id) throws SQLException;
     public String getColour(String idevent, String iduser) throws SQLException;

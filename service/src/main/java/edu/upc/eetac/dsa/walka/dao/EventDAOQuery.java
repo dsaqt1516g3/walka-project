@@ -12,7 +12,7 @@ public interface EventDAOQuery {
    /**Corregir*/public final static String GET_EVENTS_BETWEEN = "SELECT hex(e.id) as id, e.title, hex(e.creator) as creator, e.location, e.notes, e.tag, e.startdate, e.enddate, e.creation_timestamp, e.last_modified FROM events AS e INNER JOIN user_events AS ue ON e.id = ue.idevent WHERE ue.iduser = unhex(?) AND (e.startdate BETWEEN ? AND ?)";
     public final static String GET_EVENTS_BY_MONTH = "SELECT hex(e.id) as id, e.title, hex(e.creator) as creator, e.location, e.notes, e.tag, e.startdate, e.enddate, e.creation_timestamp, e.last_modified FROM events AS e INNER JOIN user_events AS ue ON e.id = ue.idevent WHERE ue.iduser = unhex(?) AND (e.startdate BETWEEN ? AND date_add(?, INTERVAL 1 MONTH))";
     public final static String GET_EVENTS_BY_DAY = "SELECT hex(e.id) as id, e.title, hex(e.creator) as creator, e.location, e.notes, e.tag, e.startdate, e.enddate, e.creation_timestamp, e.last_modified FROM events AS e INNER JOIN user_events AS ue ON e.id = ue.idevent WHERE ue.iduser = unhex(?) AND (e.startdate BETWEEN ? AND date_add(?, INTERVAL 1 DAY))";
-    /**OK*/public final static String UPDATE_EVENT = "update events set title=?, location=?, notes=?, startdate=?, enddate=? where id=unhex(?)";
+    /**OK*/public final static String UPDATE_EVENT = "update events set title=?, location=?, notes=?, tag=?, startdate=?, enddate=? where id=unhex(?)";
     /**OK*/public final static String DELETE_EVENT = "delete from events where id=unhex(?)";
     public final static String CHECK_USER_IN_EVENT = "select * from user_events where iduser=unhex(?) AND idevent=unhex(?)";
     public final static String DELETE_PARTICIPANTS_EVENT = "delete from user_events where idevent=unhex(?)";

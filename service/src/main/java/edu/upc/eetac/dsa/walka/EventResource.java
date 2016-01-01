@@ -29,7 +29,7 @@ public class EventResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(WalkaMediaType.WALKA_EVENT)
-    public Response createEvent(@FormParam("title") String title, @FormParam("location") String location, @FormParam("notes") String notes, @FormParam("start") String start,@FormParam("end") String end, @FormParam("tag") String tag , @Context UriInfo uriInfo) throws URISyntaxException {
+    public Response createEvent(@FormParam("title") String title, @FormParam("location") String location, @FormParam("notes") String notes, @FormParam("start") String start,@FormParam("end") String end, @FormParam("tag") String tag , @FormParam("colour") String colour, @Context UriInfo uriInfo) throws URISyntaxException {
             if (title == null ||  start == null )
                 throw new BadRequestException("Title, start and end date are mandatory");
             EventDAO eventDAO = new EventDAOImpl();
@@ -55,6 +55,8 @@ public class EventResource {
                 System.out.println(eventurl);
                 //Introduzco en user_events
                 eventDAO.JoinEvent(securityContext.getUserPrincipal().getName(), event.getId());
+                eventDAO.modifyColour(colour, event.getId(), securityContext.getUserPrincipal().getName());
+                event.setColour(eventDAO.getColour(event.getId(), securityContext.getUserPrincipal().getName()));
 
             } catch (SQLException e) {
                 throw new InternalServerErrorException();
@@ -124,14 +126,30 @@ public class EventResource {
 
         String userid = securityContext.getUserPrincipal().getName();
 
-        try {
-            event = eventDAO.updateEvent(id, event.getTitle(), event.getLocation(), event.getNotes(), event.getStart(), event.getEnd());
 
-            if (event == null)
-                throw new NotFoundException("Sting with id = " + id + " doesn't exist");
-            //Debe ir filtro de si estas en el evento
+
+        try {
+
+
+            Event checkEvent = eventDAO.getEventbyId(event.getId());
+
+            if (checkEvent == null)
+                throw new NotFoundException("Event with id = " + id + "not found");
+
+
             if(!eventDAO.checkUserInEvent(id, userid))
                 throw new ForbiddenException("You are not in the event");
+            System.out.println(event.getTitle());
+            System.out.println(event.getColour());
+
+            eventDAO.modifyColour(event.getColour(),id ,userid);
+            String colour = event.getColour();
+            event = eventDAO.updateEvent(id, event.getTitle(), event.getLocation(), event.getNotes(), event.getTag(), event.getStart(), event.getEnd());
+            event.setColour(colour);
+
+
+
+
 
         } catch (SQLException e) {
             throw new InternalServerErrorException();
