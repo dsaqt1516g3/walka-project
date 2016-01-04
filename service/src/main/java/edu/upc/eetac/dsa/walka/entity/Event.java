@@ -37,7 +37,7 @@ public class Event {
     private String location;
     private String notes;
     private String tag;
-    private String colour;
+    private String color;
     private String url;
     private String start;
     private String end;
@@ -124,12 +124,12 @@ public class Event {
         this.tag = tag;
     }
 
-    public String getColour() {
-        return colour;
+    public String getColor() {
+        return color;
     }
 
-    public void setColour(String colour) {
-        this.colour = colour;
+    public void setColor(String colour) {
+        this.color = colour;
     }
 
     public long getLastModified() {

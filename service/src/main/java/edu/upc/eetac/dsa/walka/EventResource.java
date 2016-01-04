@@ -56,7 +56,7 @@ public class EventResource {
                 //Introduzco en user_events
                 eventDAO.JoinEvent(securityContext.getUserPrincipal().getName(), event.getId());
                 eventDAO.modifyColour(colour, event.getId(), securityContext.getUserPrincipal().getName());
-                event.setColour(eventDAO.getColour(event.getId(), securityContext.getUserPrincipal().getName()));
+                event.setColor(eventDAO.getColour(event.getId(), securityContext.getUserPrincipal().getName()));
 
             } catch (SQLException e) {
                 throw new InternalServerErrorException();
@@ -140,12 +140,12 @@ public class EventResource {
             if(!eventDAO.checkUserInEvent(id, userid))
                 throw new ForbiddenException("You are not in the event");
             System.out.println(event.getTitle());
-            System.out.println(event.getColour());
+            System.out.println(event.getColor());
 
-            eventDAO.modifyColour(event.getColour(),id ,userid);
-            String colour = event.getColour();
+            eventDAO.modifyColour(event.getColor(),id ,userid);
+            String colour = event.getColor();
             event = eventDAO.updateEvent(id, event.getTitle(), event.getLocation(), event.getNotes(), event.getTag(), event.getStart(), event.getEnd());
-            event.setColour(colour);
+            event.setColor(colour);
 
 
 

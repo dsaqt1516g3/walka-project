@@ -140,6 +140,7 @@ public class EventDAOImpl implements EventDAO {
                 event.setStart(rs.getString("startdate"));
                 event.setEnd(rs.getString("enddate"));
                 event.setTag(rs.getString("tag"));
+                event.setNotes(rs.getString("notes"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
@@ -187,6 +188,7 @@ public class EventDAOImpl implements EventDAO {
                 event.setParticipants(participants);
                 event.setStart(rs.getString("startdate"));
                 event.setEnd(rs.getString("enddate"));
+                event.setNotes(rs.getString("notes"));
                 event.setTag(rs.getString("tag"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
@@ -296,8 +298,9 @@ public class EventDAOImpl implements EventDAO {
                 event.setEnd(rs.getString("enddate"));
                 event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 event.setLastModified(rs.getTimestamp("last_modified").getTime());
+                event.setNotes(rs.getString("notes"));
                 event.setTag(rs.getString("tag"));
-                event.setColour(getColour(event.getId(), iduser));
+                event.setColor(getColour(event.getId(), iduser));
                 PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
                 String baseURI = prb.getString("walka.eventsurl");
                 String eventurl = baseURI + "/" + rs.getString("id");
