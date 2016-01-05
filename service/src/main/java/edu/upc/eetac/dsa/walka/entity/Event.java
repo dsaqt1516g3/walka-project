@@ -18,11 +18,10 @@ public class Event {
     @InjectLinks({
             @InjectLink(resource = WalkaRootAPIResource.class, style = InjectLink.Style.ABSOLUTE, rel = "home", title = "Walka Root API"),
             @InjectLink(resource = LoginResource.class, style = InjectLink.Style.ABSOLUTE, rel = "logout", title = "Logout"),
-            //@InjectLink(resource = UserResource.class, method="getUser", style = InjectLink.Style.ABSOLUTE, rel = "user-profile", title = "User profile", condition="${!empty instance.userid}", type= WalkaMediaType.WALKA_USER, bindings = @Binding(name = "id", value = "${instance.userid}"))
+            @InjectLink(resource = UserResource.class, method="getUser", style = InjectLink.Style.ABSOLUTE, rel = "creator-profile", title = "Creator profile",  bindings = @Binding(name = "id", value = "${instance.creator}")),
             @InjectLink(resource = EventResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-event", title = "Create event", type= WalkaMediaType.WALKA_EVENT),
             @InjectLink(resource = EventResource.class, method = "getEvent", style = InjectLink.Style.ABSOLUTE, rel = "self event", title = "Event", bindings = @Binding(name = "id", value = "${instance.id}")),
-            @InjectLink(resource = EventResource.class, method = "getEvent", style = InjectLink.Style.ABSOLUTE, rel = "edit-event", title = "Edit Event", bindings = @Binding(name = "id", value = "${instance.id}")),
-            @InjectLink(resource = UserResource.class, style = InjectLink.Style.ABSOLUTE, rel = "get-user", title = "Get an user")
+            @InjectLink(resource = EventResource.class, method = "updateEvent", style = InjectLink.Style.ABSOLUTE, rel = "edit-event", title = "Edit Event", bindings = @Binding(name = "id", value = "${instance.id}"))
 
 
 
@@ -32,6 +31,7 @@ public class Event {
     private List<Link> links;
     private String id;
     private String creator;
+    private String creatorName;
     private UserCollection participants;
     private String title;
     private String location;
@@ -46,6 +46,14 @@ public class Event {
 
     public List<Link> getLinks() {
         return links;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 
     public String getCreator() {

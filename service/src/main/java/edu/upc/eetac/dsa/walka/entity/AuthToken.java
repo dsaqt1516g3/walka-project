@@ -19,7 +19,8 @@ public class AuthToken {
             @InjectLink(resource = LoginResource.class, style = InjectLink.Style.ABSOLUTE, rel = "logout", title = "Logout", condition="${!empty instance.userid}"),
             @InjectLink(resource = EventResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-event", title = "Create event", condition="${!empty instance.userid}", type=WalkaMediaType.WALKA_EVENT),
             @InjectLink(resource = UserResource.class, method="getUser", style = InjectLink.Style.ABSOLUTE, rel = "user-profile", title = "User profile", condition="${!empty instance.userid}", type= WalkaMediaType.WALKA_USER, bindings = @Binding(name = "id", value = "${instance.userid}")),
-            @InjectLink(resource = CalendarResource.class, style = InjectLink.Style.ABSOLUTE, rel = "fill-calendar", title = "Events calendar", condition="${!empty instance.userid}", type= WalkaMediaType.WALKA_EVENT_COLLECTION)
+            @InjectLink(resource = CalendarResource.class, style = InjectLink.Style.ABSOLUTE, rel = "fill-calendar", title = "Events calendar", condition="${!empty instance.userid}"),
+            @InjectLink(value = "/calendar/between", style = InjectLink.Style.ABSOLUTE, rel = "between", title = "Between events", type = WalkaMediaType.WALKA_EVENT_COLLECTION)
             })
     private List<Link> links;
 

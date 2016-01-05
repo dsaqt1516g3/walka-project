@@ -3,9 +3,13 @@ package edu.upc.eetac.dsa.walka.dao;
 import edu.upc.eetac.dsa.walka.db.Database;
 import edu.upc.eetac.dsa.walka.entity.Event;
 import edu.upc.eetac.dsa.walka.entity.EventCollection;
+import edu.upc.eetac.dsa.walka.entity.User;
 import edu.upc.eetac.dsa.walka.entity.UserCollection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -69,6 +73,7 @@ public class EventDAOImpl implements EventDAO {
         Connection connection = null;
         PreparedStatement stmt = null;
         UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        UserDAO userD = new UserDAOImpl();
 
         try {
             connection = Database.getConnection();
@@ -84,6 +89,8 @@ public class EventDAOImpl implements EventDAO {
                 event.setId(rs.getString("id"));
                 event.setTitle(rs.getString("title"));
                 event.setCreator(rs.getString("creator"));
+                User user = userD.getUserById(event.getCreator());
+                event.setCreatorName(user.getFullname());
                 event.setLocation(rs.getString("location"));
                 event.setNotes(rs.getString("notes"));
                 /**Obtengo participantes de otra clase*/
@@ -273,6 +280,7 @@ public class EventDAOImpl implements EventDAO {
         Connection connection = null;
         PreparedStatement stmt = null;
         UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        UserDAO userD = new UserDAOImpl();
         try {
             connection = Database.getConnection();
 
@@ -290,6 +298,8 @@ public class EventDAOImpl implements EventDAO {
                 event.setId(rs.getString("id"));
                 event.setTitle(rs.getString("title"));
                 event.setCreator(rs.getString("creator"));
+                User user = userD.getUserById(event.getCreator());
+                event.setCreatorName(user.getFullname());
                 event.setLocation(rs.getString("location"));
                 /**Obtengo participantes de otra clase*/
                 UserCollection participants = userDAO.getParticipantsByEventId(event.getId());

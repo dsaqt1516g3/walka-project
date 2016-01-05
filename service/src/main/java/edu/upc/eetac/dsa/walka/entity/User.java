@@ -19,8 +19,8 @@ public class User {
                 @InjectLink(resource = LoginResource.class, style = InjectLink.Style.ABSOLUTE, rel = "logout", title = "Logout"),
                 @InjectLink(resource = UserResource.class, method = "getUser", style = InjectLink.Style.ABSOLUTE, rel = "self user-profile", title = "User profile", type= WalkaMediaType.WALKA_USER, bindings = @Binding(name = "id", value = "${instance.id}")),
                 @InjectLink(resource = EventResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-event", title = "Create event", type= WalkaMediaType.WALKA_EVENT),
-                @InjectLink(resource = CalendarResource.class, method = "/getEventsBetween",style = InjectLink.Style.ABSOLUTE, rel = "fill-calendar", title = "Events calendar", type= WalkaMediaType.WALKA_EVENT_COLLECTION),
-                @InjectLink(resource = EventResource.class, method = "getEvent", style = InjectLink.Style.ABSOLUTE, rel = "self event", title = "Event", bindings = @Binding(name = "id", value = "${instance.id}"))
+                @InjectLink(resource = CalendarResource.class, style = InjectLink.Style.ABSOLUTE, rel = "fill-calendar", title = "Events calendar", type= WalkaMediaType.WALKA_EVENT_COLLECTION)
+
 
 
         })
