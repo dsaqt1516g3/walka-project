@@ -228,7 +228,7 @@ public class EventResource {
     @Path("/{id}/participant/add")
     @POST
     @Produces(WalkaMediaType.WALKA_USER)
-    public User addUserToEvent(@PathParam("id") String id, @FormParam("iduser") String userlogin){
+    public User addUserToEvent(@PathParam("id") String id, @FormParam("loginuser") String userlogin){
         String userid = securityContext.getUserPrincipal().getName();
         EventDAO eventDAO = new EventDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
@@ -270,7 +270,6 @@ public class EventResource {
 
     @Path("{id}/participant/del/{loginuser}")
     @DELETE
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteUserFromEvent(@PathParam("id") String id, @PathParam("loginuser") String userlogin){
 
         String userid = securityContext.getUserPrincipal().getName();

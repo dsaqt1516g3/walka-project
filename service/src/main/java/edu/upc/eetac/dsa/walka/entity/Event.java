@@ -21,7 +21,10 @@ public class Event {
             @InjectLink(resource = UserResource.class, method="getUser", style = InjectLink.Style.ABSOLUTE, rel = "creator-profile", title = "Creator profile",  bindings = @Binding(name = "id", value = "${instance.creator}")),
             @InjectLink(resource = EventResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-event", title = "Create event", type= WalkaMediaType.WALKA_EVENT),
             @InjectLink(resource = EventResource.class, method = "getEvent", style = InjectLink.Style.ABSOLUTE, rel = "self event", title = "Event", bindings = @Binding(name = "id", value = "${instance.id}")),
-            @InjectLink(resource = EventResource.class, method = "updateEvent", style = InjectLink.Style.ABSOLUTE, rel = "edit-event", title = "Edit Event", bindings = @Binding(name = "id", value = "${instance.id}"))
+            @InjectLink(resource = EventResource.class, method = "updateEvent", style = InjectLink.Style.ABSOLUTE, rel = "edit-event", title = "Edit Event", bindings = @Binding(name = "id", value = "${instance.id}")),
+            @InjectLink(value = "/events/{id}/participant", style = InjectLink.Style.ABSOLUTE, rel = "leaveEvent", title = "Leave event", bindings = @Binding(name = "id", value = "${instance.id}")),
+            @InjectLink(value = "/events/{id}/participant/add", style = InjectLink.Style.ABSOLUTE, rel = "addUser", title = "Add user to event", bindings = @Binding(name = "id", value = "${instance.id}")),
+            @InjectLink(value = "/events/{id}/participant/del/", style = InjectLink.Style.ABSOLUTE, rel = "deleteUser", title = "Delete user from event", bindings = @Binding(name = "id", value = "${instance.id}"))
 
 
 

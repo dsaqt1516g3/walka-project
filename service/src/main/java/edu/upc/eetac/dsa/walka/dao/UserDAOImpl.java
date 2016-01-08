@@ -16,7 +16,7 @@ import java.sql.SQLException;
  */
 public class UserDAOImpl implements UserDAO {
     @Override
-    public User createUser(String loginid, String password, String email, String fullname) throws SQLException, UserAlreadyExistsException {
+    public User createUser(String loginid, String password, String email, String fullname, String country, String city, String phonenumber, String birthdate) throws SQLException, UserAlreadyExistsException {
         Connection connection = null;
         PreparedStatement stmt = null;
         String id = null;
@@ -43,6 +43,10 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(3, password);
             stmt.setString(4, email);
             stmt.setString(5, fullname);
+            stmt.setString(6, country);
+            stmt.setString(7, city);
+            stmt.setString(8, phonenumber);
+            stmt.setString(9, birthdate);
             stmt.executeUpdate();
 
             stmt.close();
@@ -64,7 +68,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User updateProfile(String id, String email, String fullname) throws SQLException {
+    public User updateProfile(String id, String email, String fullname,String country, String city, String phonenumber, String birthdate) throws SQLException {
         User user = null;
 
         Connection connection = null;
@@ -75,7 +79,11 @@ public class UserDAOImpl implements UserDAO {
             stmt = connection.prepareStatement(UserDAOQuery.UPDATE_USER);
             stmt.setString(1, email);
             stmt.setString(2, fullname);
-            stmt.setString(3, id);
+            stmt.setString(3, country);
+            stmt.setString(4, city);
+            stmt.setString(5, phonenumber);
+            stmt.setString(6, birthdate);
+            stmt.setString(7, id);
 
             int rows = stmt.executeUpdate();
             if (rows == 1)
@@ -115,6 +123,10 @@ public class UserDAOImpl implements UserDAO {
                 user.setLoginid(rs.getString("loginid"));
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
+                user.setCountry(rs.getString("country"));
+                user.setCity(rs.getString("city"));
+                user.setPhonenumber(rs.getString("phonenumber"));
+                user.setBirthdate(rs.getString("birthdate"));
             }
         } catch (SQLException e) {
             // Relanza la excepción
@@ -149,6 +161,10 @@ public class UserDAOImpl implements UserDAO {
                 user.setLoginid(rs.getString("loginid"));
                 user.setEmail(rs.getString("email"));
                 user.setFullname(rs.getString("fullname"));
+                user.setCountry(rs.getString("country"));
+                user.setCity(rs.getString("city"));
+                user.setPhonenumber(rs.getString("phonenumber"));
+                user.setBirthdate(rs.getString("birthdate"));
             }
         } catch (SQLException e) {
             throw e;

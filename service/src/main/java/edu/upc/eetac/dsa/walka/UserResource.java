@@ -25,14 +25,14 @@ public class UserResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(WalkaMediaType.WALKA_AUTH_TOKEN)
-    public Response registerUser(@FormParam("loginid") String loginid, @FormParam("password") String password, @FormParam("email") String email, @FormParam("fullname") String fullname, @Context UriInfo uriInfo) throws URISyntaxException {
+    public Response registerUser(@FormParam("loginid") String loginid, @FormParam("password") String password, @FormParam("email") String email, @FormParam("fullname") String fullname, @FormParam("country") String country,@FormParam("city") String city, @FormParam("phonenumber") String phonenumber, @FormParam("birthdate") String birthdate, @Context UriInfo uriInfo) throws URISyntaxException {
         if(loginid == null || password == null || email == null || fullname == null)
             throw new BadRequestException("All parameters are mandatory");
         UserDAO userDAO = new UserDAOImpl();
         User user = null;
         AuthToken authenticationToken = null;
         try{
-            user = userDAO.createUser(loginid, password, email, fullname);
+            user = userDAO.createUser(loginid, password, email, fullname, country, city, phonenumber, birthdate);
             authenticationToken = (new AuthTokenDAOImpl()).createAuthToken(user.getId());
         }catch (UserAlreadyExistsException e){
             throw new WebApplicationException("Loginid already exists", Response.Status.CONFLICT);
@@ -64,6 +64,13 @@ public class UserResource {
     @Consumes(WalkaMediaType.WALKA_USER)
     @Produces(WalkaMediaType.WALKA_USER)
     public User updateUser(@PathParam("id") String id, User user) {
+        System.out.println(user.getId());
+        System.out.println(user.getCity());
+        System.out.println(user.getCountry());
+        System.out.println(user.getPhonenumber());
+        System.out.println(user.getBirthdate());
+
+
         if(user == null)
             throw new BadRequestException("Entity is null");
         if(!id.equals(user.getId()))
@@ -75,7 +82,7 @@ public class UserResource {
 
         UserDAO userDAO = new UserDAOImpl();
         try {
-            user = userDAO.updateProfile(userid, user.getEmail(), user.getFullname());
+            user = userDAO.updateProfile(userid, user.getEmail(), user.getFullname(), user.getCountry(), user.getCity(), user.getPhonenumber(), user.getBirthdate());
             if(user == null)
                 throw new NotFoundException("User with id = "+id+" doesn't exist");
         } catch (SQLException e) {
