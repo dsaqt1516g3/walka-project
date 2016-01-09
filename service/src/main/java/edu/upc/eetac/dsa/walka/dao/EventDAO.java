@@ -25,5 +25,6 @@ public interface EventDAO {
     public boolean deleteParticipants(String id) throws SQLException;
     public String getColour(String idevent, String iduser) throws SQLException;
     public boolean modifyColour(String colour, String idevent, String iduser) throws SQLException;
+    public boolean eventIsFull(String idevent) throws SQLException;
 
 }

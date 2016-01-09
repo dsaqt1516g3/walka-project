@@ -273,6 +273,7 @@ public class EventDAOImpl implements EventDAO {
         return eventCollection;
     }
 
+
     @Override
     public EventCollection getEventsBetween(String iduser, String start, String end) throws SQLException {
         EventCollection eventCollection = new EventCollection();
@@ -430,6 +431,36 @@ public class EventDAOImpl implements EventDAO {
 
     }
 
+    @Override
+    public boolean eventIsFull(String idevent) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        int Participants = 0;
+        System.out.println("Llego aqui");
+        try {
+
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.GET_NUMBER_PARTICIPANTS_EVENT);
+            stmt.setString(1, idevent);
+
+            ResultSet rs= stmt.executeQuery();
+            rs.next();
+            System.out.println(rs.getInt("participants"));
+            Participants = rs.getInt(1);
+            //Si el evento está lleno, devuelve true
+            return (Participants>=EventDAOQuery.MAX_NUMBER_PEOPLE_EVENT);
+
+
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+    
     //Solo puede eliminar un evento su creador
     @Override
     public boolean deleteEvent(String id) throws SQLException {

@@ -253,6 +253,8 @@ public class EventResource {
             if(eventDAO.checkUserInEvent(id, user.getId()))
                 throw new ForbiddenException("The user is already in the event");
 
+           if(eventDAO.eventIsFull(id))
+              throw new ForbiddenException("Event is full");
 
             if (!eventDAO.JoinEvent(user.getId(), id))
                 throw new NotFoundException("Couldn't add participant to event: " + id);

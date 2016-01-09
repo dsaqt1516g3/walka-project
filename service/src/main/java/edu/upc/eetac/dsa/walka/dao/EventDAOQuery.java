@@ -20,4 +20,6 @@ public interface EventDAOQuery {
     /**OK*/public final static String LEAVE_EVENT = "delete from user_events where idevent=unhex(?) AND iduser=unhex(?)";
     public final static String MODIFY_COLOUR = "UPDATE user_events SET colour=? WHERE idevent=unhex(?) AND iduser=unhex(?)";
     public final static String GET_COLOUR = "select colour from user_events where idevent=unhex(?) AND iduser=unhex(?)";
+    public final static String GET_NUMBER_PARTICIPANTS_EVENT = "select count(*) as participants from user_events where idevent=unhex(?)";
+    public final static int MAX_NUMBER_PEOPLE_EVENT = 50;
 }
