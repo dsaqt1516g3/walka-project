@@ -15,8 +15,12 @@ public class Group {
     private List<Link> links;
     private String id;
     private String creator;
+    private String creatorName;
     private String name;
     private String description;
+    private UserCollection components;
+    private long creationTimestamp;
+    private long lastModified;
 
     public List<Link> getLinks() {
         return links;
@@ -50,11 +54,43 @@ public class Group {
         this.name = name;
     }
 
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public UserCollection getComponents() {
+        return components;
+    }
+
+    public void setComponents(UserCollection components) {
+        this.components = components;
+    }
+
+    public long getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public void setCreationTimestamp(long creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+    }
+
+    public long getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
 }

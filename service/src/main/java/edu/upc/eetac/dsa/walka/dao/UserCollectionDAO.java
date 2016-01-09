@@ -9,4 +9,5 @@ import java.sql.SQLException;
  */
 public interface UserCollectionDAO {
     public UserCollection getParticipantsByEventId(String eventid) throws SQLException;
+    public UserCollection getUsersByGroupId(String eventid) throws SQLException;
 }

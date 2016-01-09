@@ -47,4 +47,36 @@ public class UserCollectionDAOImpl implements UserCollectionDAO {
         return userCollection;
 
     }
+
+    @Override
+    public UserCollection getUsersByGroupId(String eventid) throws SQLException {
+        UserCollection userCollection = new UserCollection();
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+
+        try {
+            connection = Database.getConnection();
+            stmt = connection.prepareStatement(UserCollectionDAOQuery.GET_USERS_BY_GROUP_ID);
+            stmt.setString(1, eventid);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setLoginid(rs.getString("loginid"));
+                user.setEmail(rs.getString("email"));
+                user.setFullname(rs.getString("fullname"));
+
+                userCollection.getUsers().add(user);
+
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return userCollection;
+    }
 }

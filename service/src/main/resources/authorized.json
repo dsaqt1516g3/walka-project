@@ -14,5 +14,9 @@
   {
   "path": "login",
   "methods": ["POST"]
+  },
+  {
+    "path": "(?i)groups/([0-9a-f]{32})?",
+    "methods": ["GET"]
   }
 ]

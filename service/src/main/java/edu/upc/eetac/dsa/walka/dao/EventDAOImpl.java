@@ -448,7 +448,7 @@ public class EventDAOImpl implements EventDAO {
             rs.next();
             System.out.println(rs.getInt("participants"));
             Participants = rs.getInt(1);
-            //Si el evento está lleno, devuelve true
+            //Si la
             return (Participants>=EventDAOQuery.MAX_NUMBER_PEOPLE_EVENT);
 
 
@@ -460,7 +460,8 @@ public class EventDAOImpl implements EventDAO {
             if (connection != null) connection.close();
         }
     }
-    
+
+
     //Solo puede eliminar un evento su creador
     @Override
     public boolean deleteEvent(String id) throws SQLException {

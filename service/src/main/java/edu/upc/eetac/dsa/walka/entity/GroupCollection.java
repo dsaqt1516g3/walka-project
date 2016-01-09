@@ -1,7 +1,6 @@
-package edu.upc.eetac.dsa.walka;
+package edu.upc.eetac.dsa.walka.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import edu.upc.eetac.dsa.walka.entity.Group;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
