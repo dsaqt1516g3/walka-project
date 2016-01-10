@@ -1,9 +1,7 @@
 package edu.upc.eetac.dsa.walka.dao;
 
 import edu.upc.eetac.dsa.walka.db.Database;
-import edu.upc.eetac.dsa.walka.entity.Group;
-import edu.upc.eetac.dsa.walka.entity.User;
-import edu.upc.eetac.dsa.walka.entity.UserCollection;
+import edu.upc.eetac.dsa.walka.entity.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -99,12 +97,256 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     @Override
-    public Group updateGroup(String id, String creator, String name, String description) throws SQLException {
-        return null;
+    public Group updateGroup(String id, String name, String description) throws SQLException {
+        Group group = null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.UPDATE_GROUP);
+
+            stmt.setString(1, name);
+            stmt.setString(2, description);
+            stmt.setString(3, id);
+            int rows = stmt.executeUpdate();
+            if (rows == 1)
+                group = getGroupbyId(id);
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+
+        return group;
     }
 
     @Override
     public boolean deleteGroup(String id) throws SQLException {
-        return false;
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        System.out.println("deleteGroup");
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.DELETE_GROUP);
+            stmt.setString(1, id);
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public boolean checkUserInGroup(String idgroup, String iduser) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.CHECK_USER_IN_GROUP);
+            stmt.setString(1, iduser);
+            stmt.setString(2, idgroup);
+
+            ResultSet rs= stmt.executeQuery();
+
+            return  (rs.next());
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public boolean checkUserInInvitation(String idgroup, String iduser) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.CHECK_IF_USER_IS_INVITED_TO_GROUP);
+            stmt.setString(1, idgroup);
+            stmt.setString(2, iduser);
+
+            ResultSet rs= stmt.executeQuery();
+
+            return  (rs.next());
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public InvitationCollection checkInvitations(String userid) throws SQLException {
+        InvitationCollection invitationCollection = new InvitationCollection();
+        Invitation invitation = null;
+        Group group = null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.CHECK_INVITATIONS);
+            stmt.setString(1, userid);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                invitation = new Invitation();
+                group = new Group();
+                group = getGroupbyId(rs.getString("groupid"));
+                invitation.setGroupInvitator(group);
+                invitation.setUserInvitedId(rs.getString("userInvited"));
+                invitationCollection.getInvitations().add(invitation);
+
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return invitationCollection;
+    }
+
+    @Override
+    public boolean addUserToGroup(String idgroup, String iduser) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.ADD_USER_TO_GROUP);
+            stmt.setString(1, idgroup);
+            stmt.setString(2, iduser);
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public boolean deleteUserFromGroup(String idgroup, String iduser) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.DELETE_USER_FROM_GROUP);
+            stmt.setString(1, idgroup);
+            stmt.setString(2, iduser);
+
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public boolean inviteUserToGroup(String idgroup, String iduser) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.INVITE_USERID_TO_GROUP);
+            stmt.setString(1, idgroup);
+            stmt.setString(2, iduser);
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public boolean deleteUserFromInvitations(String idgroup, String userInvited) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.DELETE_USER_FROM_PENDING_INVITATIONS);
+            stmt.setString(1, idgroup);
+            stmt.setString(2, userInvited);
+
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public boolean addGroupMembersToEvent(String idgroup, String idevent) throws SQLException {
+        UserCollection groupMembers;
+    }
+
+    @Override
+    public boolean groupIsFull(String idgroup) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        int NParticipants = 0;
+        System.out.println("Checks if it's full");
+
+        try {
+
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.GET_NUMBER_PARTICIPANTS_GROUP);
+            stmt.setString(1, idgroup);
+
+            ResultSet rs= stmt.executeQuery();
+            rs.next();
+            System.out.println(rs.getInt("participants"));
+            NParticipants = rs.getInt(1);
+            //Si el numero de personas llega al limite, no se permite añadir
+            return (NParticipants>=GroupDAOQuery.MAX_NUMBER_PEOPLE_GROUP);
+
+
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
     }
 }

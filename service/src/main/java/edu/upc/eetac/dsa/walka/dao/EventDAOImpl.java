@@ -435,7 +435,7 @@ public class EventDAOImpl implements EventDAO {
     public boolean eventIsFull(String idevent) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
-        int Participants = 0;
+        int NParticipants = 0;
         System.out.println("Llego aqui");
         try {
 
@@ -447,9 +447,9 @@ public class EventDAOImpl implements EventDAO {
             ResultSet rs= stmt.executeQuery();
             rs.next();
             System.out.println(rs.getInt("participants"));
-            Participants = rs.getInt(1);
-            //Si la
-            return (Participants>=EventDAOQuery.MAX_NUMBER_PEOPLE_EVENT);
+            NParticipants = rs.getInt(1);
+            //Si el numero de personas llega al limite, no se permite añadir
+            return (NParticipants>=EventDAOQuery.MAX_NUMBER_PEOPLE_EVENT);
 
 
 
