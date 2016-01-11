@@ -2,6 +2,7 @@ package edu.upc.eetac.dsa.walka.dao;
 
 import edu.upc.eetac.dsa.walka.entity.Group;
 import edu.upc.eetac.dsa.walka.entity.InvitationCollection;
+import edu.upc.eetac.dsa.walka.entity.UserCollection;
 
 import java.sql.SQLException;
 
@@ -20,7 +21,7 @@ public interface GroupDAO {
     public boolean deleteUserFromGroup(String idgroup, String iduser) throws SQLException;
     public boolean inviteUserToGroup(String idgroup, String iduser) throws SQLException;
     public boolean deleteUserFromInvitations(String idgroup, String userInvited) throws SQLException;
-    public boolean addGroupMembersToEvent(String idgroup, String idevent) throws SQLException;
+    public UserCollection addGroupMembersToEvent(String idgroup, String idevent) throws SQLException;
     public boolean groupIsFull(String idgroup) throws SQLException;
 
 

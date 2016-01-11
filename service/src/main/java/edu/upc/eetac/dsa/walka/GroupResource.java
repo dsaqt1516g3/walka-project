@@ -251,11 +251,111 @@ public class GroupResource {
     @Path("/{id}/invitations/accept")
     @POST
     @Produces(WalkaMediaType.WALKA_GROUP)
-    public Group acceptInvitations(){
+    public Group acceptInvitation(@PathParam("id") String id){
 
         Group group;
         GroupDAO groupDAO= new GroupDAOImpl();
+        String userid = securityContext.getUserPrincipal().getName();
+        UserDAO userDAO = new UserDAOImpl();
+        User user = null;
+
+        System.out.println(id);
+        System.out.println(userid);
+
+        try {
+
+            if (groupDAO.getGroupbyId(id) == null)
+                throw new NotFoundException("Group with id = " + id + " not found");
+
+            group = groupDAO.getGroupbyId(id);
+            String creator = group.getCreator();
+            System.out.println("Obtengo bien el grupo: "+ group.getId());
+            System.out.println(creator);
+
+            if (!groupDAO.checkUserInInvitation(id,userid))
+                throw new ForbiddenException("You were no invited to this group");
+
+            System.out.println("1");
+
+            if(groupDAO.checkUserInGroup(id,userid))
+                throw new ForbiddenException("You are already in the group");
+
+            System.out.println("2");
+
+            if(groupDAO.groupIsFull(id))
+                throw new ForbiddenException("Group is full");
+
+            System.out.println("3");
+
+            //Si lo puedo añadir, lo quito de invitaciones
+
+            if (groupDAO.addUserToGroup(id,userid))
+                groupDAO.deleteUserFromInvitations(id,userid);
+            System.out.println("4");
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+
+        return group;
     }
+
+    @Path("/{id}/invitations/refuse")
+    @POST
+    public void refuseInvitation(@PathParam("id") String id){
+
+        Group group;
+        GroupDAO groupDAO= new GroupDAOImpl();
+        String userid = securityContext.getUserPrincipal().getName();
+        UserDAO userDAO = new UserDAOImpl();
+        User user = null;
+
+        System.out.println(id);
+        System.out.println(userid);
+
+        try {
+
+            if (groupDAO.getGroupbyId(id) == null)
+                throw new NotFoundException("Group with id = " + id + " not found");
+
+            group = groupDAO.getGroupbyId(id);
+            String creator = group.getCreator();
+            System.out.println("Obtengo bien el grupo: "+ group.getId());
+            System.out.println(creator);
+
+            if (!groupDAO.checkUserInInvitation(id,userid))
+                throw new ForbiddenException("You were no invited to this group");
+
+            System.out.println("1");
+
+            if(groupDAO.checkUserInGroup(id,userid))
+                throw new ForbiddenException("You are already in the group");
+
+            System.out.println("2");
+
+            if(groupDAO.groupIsFull(id))
+                throw new ForbiddenException("Group is full");
+
+            System.out.println("3");
+
+            //Si lo puedo añadir, lo quito de invitaciones
+
+            if (!groupDAO.deleteUserFromInvitations(id,userid))
+                throw new InternalServerErrorException("Couldn't do the operation");
+
+            System.out.println("4");
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+
+
+    }
+
 
 
 

@@ -24,7 +24,7 @@ public interface GroupDAOQuery {
     public final static String CHECK_IF_USER_IS_INVITED_TO_GROUP = "select * from invitations where groupid=unhex(?) AND userInvited=unhex(?)";
 
     public final static String GET_NUMBER_PARTICIPANTS_GROUP = "select count(*) as participants from user_groups where idgroup=unhex(?)";
-    public final static int MAX_NUMBER_PEOPLE_GROUP = 40;
+    public final static int MAX_NUMBER_PEOPLE_GROUP = 20;
 
 
 }

@@ -1,13 +1,7 @@
 package edu.upc.eetac.dsa.walka;
 
-import edu.upc.eetac.dsa.walka.dao.EventDAO;
-import edu.upc.eetac.dsa.walka.dao.EventDAOImpl;
-import edu.upc.eetac.dsa.walka.dao.UserDAO;
-import edu.upc.eetac.dsa.walka.dao.UserDAOImpl;
-import edu.upc.eetac.dsa.walka.entity.AuthToken;
-import edu.upc.eetac.dsa.walka.entity.Event;
-import edu.upc.eetac.dsa.walka.entity.EventCollection;
-import edu.upc.eetac.dsa.walka.entity.User;
+import edu.upc.eetac.dsa.walka.dao.*;
+import edu.upc.eetac.dsa.walka.entity.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -331,41 +325,57 @@ public class EventResource {
     }
 
 
-
-/**
-
-    @Path("/{id}/participants")
+    @Path("{id}/sharewithgroup")
     @POST
-    @Consumes(WalkaMediaType.WALKA_LOGIN_COLLECTION)
     @Produces(WalkaMediaType.WALKA_USER_COLLECTION)
-    public UserCollection addParticipantsToEvent(@PathParam("id") String idevent, LoginUsersCollection logins){
-        String userid = securityContext.getUserPrincipal().getName();
-        UserDAO userDAO = new UserDAOImpl();
-        EventDAO eventDAO = new EventDAOImpl();
-        UserCollection participantsAdded;
+    public UserCollection shareEventWithGroup(@PathParam("id") String eventid, @FormParam("groupid") String groupid){
+
+        UserCollection peopleAdded;
         Event event = null;
+        Group group = null;
+        EventDAO eventDAO = new EventDAOImpl();
+        GroupDAO groupDAO = new GroupDAOImpl();
+        String userid = securityContext.getUserPrincipal().getName();
+
+        System.out.println(userid);
+
         try {
 
-            event = eventDAO.getEventbyId(idevent);
+
+
+
+            System.out.println("1");
+
+            if (eventDAO.getEventbyId(eventid) == null)
+                throw new NotFoundException("Event with id = " + eventid + " not found");
+
+            event = eventDAO.getEventbyId(eventid);
             String creator = event.getCreator();
 
-            if (event == null)
-                throw new NotFoundException("Event with id = " + idevent + "not found");
+
+            if (groupDAO.getGroupbyId(groupid) == null)
+                throw new NotFoundException("Group with id = " + groupid + " doesn't exists");
+
+            group = groupDAO.getGroupbyId(groupid);
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("Only the creator can add participants");
+                throw new ForbiddenException("Only the creator can add participants or share the event with groups");
 
-            for(String login: )){
+            if(!groupDAO.checkUserInGroup(groupid,userid))
+                throw new ForbiddenException("You are not in the group, so you can't share the event");
 
-            }
+            if(eventDAO.eventIsFull(eventid))
+                throw new ForbiddenException("Event is full");
+
+
+            peopleAdded = groupDAO.addGroupMembersToEvent(groupid,eventid);
+
 
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }
-
+        return peopleAdded;
     }
-
-*/
 
 
 

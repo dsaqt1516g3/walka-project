@@ -149,6 +149,9 @@ public class GroupDAOImpl implements GroupDAO {
     public boolean checkUserInGroup(String idgroup, String iduser) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
+        System.out.println(idgroup);
+        System.out.println(iduser);
+
         try {
 
             connection = Database.getConnection();
@@ -160,6 +163,8 @@ public class GroupDAOImpl implements GroupDAO {
             ResultSet rs= stmt.executeQuery();
 
             return  (rs.next());
+
+
 
         } catch (SQLException e) {
             throw e;
@@ -315,8 +320,55 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     @Override
-    public boolean addGroupMembersToEvent(String idgroup, String idevent) throws SQLException {
-        UserCollection groupMembers;
+    public UserCollection addGroupMembersToEvent(String idgroup, String idevent) throws SQLException {
+        UserCollection groupMembers = new UserCollection();
+        UserCollection peopleAdded = new UserCollection();
+        EventDAO eventDAO = new EventDAOImpl();
+
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+
+
+        try {
+            //Obtengo participantes
+            connection = Database.getConnection();
+            stmt = connection.prepareStatement(UserCollectionDAOQuery.GET_USERS_BY_GROUP_ID);
+            stmt.setString(1, idgroup);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setLoginid(rs.getString("loginid"));
+                user.setEmail(rs.getString("email"));
+                user.setFullname(rs.getString("fullname"));
+
+                groupMembers.getUsers().add(user);
+
+            }
+
+            //Añado si no estan ya en el evento
+
+            for (User member: groupMembers.getUsers()){
+                System.out.println("Miembros: " + member.getFullname() + "ID: " + member.getId());
+
+                if (!eventDAO.checkUserInEvent(idevent, member.getId())){
+
+                    System.out.println("Añado: " + member.getFullname() + "con ID: " + member.getId());
+                    eventDAO.JoinEvent(member.getId(), idevent);
+                    peopleAdded.getUsers().add(member);
+                }
+            }
+
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return peopleAdded;
     }
 
     @Override
