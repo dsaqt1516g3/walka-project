@@ -435,7 +435,7 @@ public class EventDAOImpl implements EventDAO {
     public boolean eventIsFull(String idevent) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
-        int NParticipants = 0;
+        int Participants = 0;
         System.out.println("Llego aqui");
         try {
 
@@ -447,9 +447,9 @@ public class EventDAOImpl implements EventDAO {
             ResultSet rs= stmt.executeQuery();
             rs.next();
             System.out.println(rs.getInt("participants"));
-            NParticipants = rs.getInt(1);
-            //Si el numero de personas llega al limite, no se permite añadir
-            return (NParticipants>=EventDAOQuery.MAX_NUMBER_PEOPLE_EVENT);
+            Participants = rs.getInt(1);
+            //Si
+            return (Participants>=EventDAOQuery.MAX_NUMBER_PEOPLE_EVENT);
 
 
 
@@ -554,6 +554,67 @@ public class EventDAOImpl implements EventDAO {
         return colour;
     }
 
+    @Override
+    public EventCollection searchEvents(String keyword, String iduser) throws SQLException {
+        EventCollection eventCollection = new EventCollection();
+        Event event = null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.SEARCH_EVENT);
+            stmt.setString(1,iduser);
+            stmt.setString(2,keyword);
+            stmt.setString(3,keyword);
+            stmt.setString(4,keyword);
+            stmt.setString(5,keyword);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                event = new Event();
+
+                event.setId(rs.getString("id"));
+                System.out.println(event.getId());
+                event.setTitle(rs.getString("title"));
+                System.out.println(event.getTitle());
+                event.setCreator(rs.getString("creator"));
+                System.out.println(event.getCreator());
+                event.setLocation(rs.getString("location"));
+                System.out.println(event.getLocation());
+                event.setNotes(rs.getString("notes"));
+                System.out.println(event.getNotes());
+                /**Obtengo participantes de otra clase*/
+                UserCollection participants = userDAO.getParticipantsByEventId(event.getId());
+                event.setParticipants(participants);
+                event.setStart(rs.getString("startdate"));
+                System.out.println(event.getStart());
+                event.setEnd(rs.getString("enddate"));
+                System.out.println(event.getEnd());
+                event.setTag(rs.getString("tag"));
+                event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                //Creación url
+                PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
+                String baseURI = prb.getString("walka.eventsurl");
+                String eventurl = baseURI + "/" + event.getId();
+                event.setUrl(eventurl);
+                event.setLastModified(rs.getTimestamp("last_modified").getTime());
+
+
+                eventCollection.getEvents().add(event);
+
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return eventCollection;
+    }
 }
 
 

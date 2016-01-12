@@ -23,4 +23,5 @@ public interface EventDAOQuery {
     public final static String GET_COLOUR = "select colour from user_events where idevent=unhex(?) AND iduser=unhex(?)";
     public final static String GET_NUMBER_PARTICIPANTS_EVENT = "select count(*) as participants from user_events where idevent=unhex(?)";
     public final static int MAX_NUMBER_PEOPLE_EVENT = 50;
+    public final static String SEARCH_EVENT ="SELECT hex(e.id) as id, e.title, hex(e.creator) as creator, e.location, e.notes, e.tag, e.startdate, e.enddate, e.creation_timestamp, e.last_modified FROM events AS e INNER JOIN user_events AS ue ON e.id = ue.idevent WHERE ue.iduser = unhex(?) AND title REGEXP ? OR location REGEXP ? OR notes REGEXP ? OR tag REGEXP ?";
 }

@@ -377,6 +377,22 @@ public class EventResource {
         return peopleAdded;
     }
 
+    @Path("/search")
+    @GET
+    @Produces(WalkaMediaType.WALKA_EVENT_COLLECTION)
+    public EventCollection searchEvents(@QueryParam("keyword") String keyword){
+        EventCollection eventCollection;
+        EventDAO eventDAO = new EventDAOImpl();
+        String userid = securityContext.getUserPrincipal().getName();
 
+        try {
+            eventCollection = eventDAO.searchEvents(keyword,userid);
+            eventCollection.setFromDate("Search: " + keyword);
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return eventCollection;
+
+    }
 
 }
