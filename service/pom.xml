@@ -90,12 +90,7 @@
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
         </dependency>
-
-        <!-- Jersey declarative hyperlinking -->
-        <dependency>
-            <groupId>org.glassfish.jersey.ext</groupId>
-            <artifactId>jersey-declarative-linking</artifactId>
-        </dependency>
+        
     </dependencies>
 
     <build>
