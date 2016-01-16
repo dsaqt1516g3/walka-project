@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.walka;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
@@ -16,6 +17,7 @@ public class WalkaResourceConfig extends ResourceConfig {
         packages("edu.upc.eetac.dsa.walka.cors");
         register(RolesAllowedDynamicFeature.class);
         register(DeclarativeLinkingFeature.class);
+        register(JacksonFeature.class);
     }
 
 
