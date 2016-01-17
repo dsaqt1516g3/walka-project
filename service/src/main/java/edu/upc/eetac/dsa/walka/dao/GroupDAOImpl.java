@@ -220,6 +220,7 @@ public class GroupDAOImpl implements GroupDAO {
                 group = new Group();
                 group = getGroupbyId(rs.getString("groupid"));
                 invitation.setGroupInvitator(group);
+                invitation.setIdgroup(group.getId());
                 invitation.setUserInvitedId(rs.getString("userInvited"));
                 invitationCollection.getInvitations().add(invitation);
 
@@ -400,5 +401,57 @@ public class GroupDAOImpl implements GroupDAO {
             if (stmt != null) stmt.close();
             if (connection != null) connection.close();
         }
+    }
+
+    @Override
+    public GroupCollection getGroupsByUserId(String iduser) throws SQLException {
+        GroupCollection groupCollection = new GroupCollection();
+        Group group = null;
+        UserDAO userD = new UserDAOImpl();
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.GET_GROUPS_USERID);
+            stmt.setString(1,iduser);
+            System.out.println("Security: "+iduser);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                group = new Group();
+
+
+                group.setId(rs.getString("id"));
+                System.out.println("ID G: " + group.getId());
+                group.setCreator(rs.getString("creator"));
+                System.out.println("Creator: " + group.getCreator());
+                User user = userD.getUserById(group.getCreator());
+                group.setCreatorName(user.getFullname());
+                System.out.println(user.getFullname());
+                group.setName(rs.getString("name"));
+                group.setDescription(rs.getString("description"));
+                /**Obtengo participantes de otra clase*/
+                UserCollection components = userDAO.getUsersByGroupId(group.getId());
+                group.setComponents(components);
+                group.setLastModified(rs.getTimestamp("last_modified").getTime());
+                group.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                System.out.println(group.getCreationTimestamp());
+
+                groupCollection.getGroups().add(group);
+
+
+
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return groupCollection;
     }
 }

@@ -14,12 +14,10 @@ import java.util.List;
 public class Invitation {
     @InjectLinks({
 
-
-
-
     })
     private List<Link> links;
     private Group groupInvitator;
+    private String idgroup;
     private String userInvitedId;
 
     public List<Link> getLinks() {
@@ -36,6 +34,14 @@ public class Invitation {
 
     public void setGroupInvitator(Group groupInvitator) {
         this.groupInvitator = groupInvitator;
+    }
+
+    public String getIdgroup() {
+        return idgroup;
+    }
+
+    public void setIdgroup(String idgroup) {
+        this.idgroup = idgroup;
     }
 
     public String getUserInvitedId() {

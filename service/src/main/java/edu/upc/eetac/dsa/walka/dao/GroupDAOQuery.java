@@ -11,8 +11,8 @@ public interface GroupDAOQuery {
     public final static String DELETE_GROUP = "delete from groups where id=unhex(?)";
     public final static String GET_GROUP_BY_ID = "select hex(g.id) as id, hex(g.idcreator) as idcreator, g.name, g.description, g.creation_timestamp, g.last_modified from groups g where id=unhex(?)";
     //Obtener participantes de un grupo se encuentra en UserCollection
-    public final static String GET_GROUPS_USERID = "select hex(g.id) as id, hex(g.idcreator) as creator, g.name, g.description ,g.creation_timestamp from groups g INNER JOIN user_groups AS ug ON g.id = ug.idgroup WHERE ug.iduser=unhex(?) AND creation_timestamp < ? order by creation_timestamp desc limit 15";
-    public final static String GET_GROUPS_USERID_AFTER = "select hex(g.id) as id, hex(g.idcreator) as creator, g.name, g.description ,g.creation_timestamp from groups g INNER JOIN user_groups AS ug ON g.id = ug.idgroup WHERE ug.iduser=unhex(?) AND creation_timestamp > ? order by creation_timestamp desc limit 15";
+    public final static String GET_GROUPS_USERID = "select hex(g.id) as id, hex(g.idcreator) as creator, g.name, g.description ,g.creation_timestamp, g.last_modified from groups g INNER JOIN user_groups AS ug ON g.id = ug.idgroup WHERE ug.iduser=unhex(?)";
+    //public final static String GET_GROUPS_USERID_AFTER = "select hex(g.id) as id, hex(g.idcreator) as creator, g.name, g.description ,g.creation_timestamp from groups g INNER JOIN user_groups AS ug ON g.id = ug.idgroup WHERE ug.iduser=unhex(?) AND creation_timestamp > ? order by creation_timestamp desc limit 15";
     //Invitaciones
     public final static String INVITE_USERID_TO_GROUP = "insert into invitations (groupid, userInvited) values (unhex(?),unhex(?))";
     public final static String DELETE_USER_FROM_PENDING_INVITATIONS = "delete from invitations where groupid=unhex(?) AND userInvited=unhex(?)";

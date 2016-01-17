@@ -4,10 +4,7 @@ import edu.upc.eetac.dsa.walka.dao.GroupDAO;
 import edu.upc.eetac.dsa.walka.dao.GroupDAOImpl;
 import edu.upc.eetac.dsa.walka.dao.UserDAO;
 import edu.upc.eetac.dsa.walka.dao.UserDAOImpl;
-import edu.upc.eetac.dsa.walka.entity.AuthToken;
-import edu.upc.eetac.dsa.walka.entity.Group;
-import edu.upc.eetac.dsa.walka.entity.InvitationCollection;
-import edu.upc.eetac.dsa.walka.entity.User;
+import edu.upc.eetac.dsa.walka.entity.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -108,6 +105,24 @@ public class GroupResource {
         }
     }
 
+    @GET
+    @Produces(WalkaMediaType.WALKA_GROUP_COLLECTION)
+    public GroupCollection getGroupsByUserId(){
+        GroupCollection groupCollection;
+        GroupDAO groupDAO = new GroupDAOImpl();
+        System.out.println("Obtener grupos");
+
+        String userid = securityContext.getUserPrincipal().getName();
+
+        try {
+            groupCollection = groupDAO.getGroupsByUserId(userid);
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return groupCollection;
+    }
+
 
     @Path("/{id}")
     @PUT
@@ -136,7 +151,7 @@ public class GroupResource {
 
                 throw new ForbiddenException("You are not in the group");
             System.out.println(group.getName());
-            group = groupDAO.updateGroup(group.getId(),group.getName(),group.getDescription());
+            group = groupDAO.updateGroup(group.getId(), group.getName(), group.getDescription());
 
         } catch (SQLException e) {
             throw new InternalServerErrorException();
@@ -353,6 +368,84 @@ public class GroupResource {
             throw new InternalServerErrorException();
         }
 
+
+    }
+
+    @Path("{id}/leave")
+    @DELETE
+    public void leaveGroup(@PathParam("id") String id){
+        String userid = securityContext.getUserPrincipal().getName();
+        GroupDAO groupDAO = new GroupDAOImpl();
+
+        Group group = null;
+
+        try {
+
+
+            if (groupDAO.getGroupbyId(id) == null)
+                throw new NotFoundException("Group with id = " + id + " not found");
+            group = groupDAO.getGroupbyId(id);
+            String creator = group.getCreator();
+
+            if(!groupDAO.checkUserInGroup(id,userid))
+                throw new ForbiddenException("You are not in the group");
+
+            if (userid.equals(creator))
+                throw new ForbiddenException("Cannot leave the group if you are the creator. Delete it");
+
+            if(!groupDAO.deleteUserFromGroup(id, userid))
+                throw new NotFoundException("Couldn't leave event:  " + id);
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+    }
+
+    @Path("{id}/deleteuser/{loginuser}")
+    @DELETE
+    public void deleteUserFromGroup(@PathParam("id") String id, @PathParam("loginuser") String loginuser){
+
+        String userid = securityContext.getUserPrincipal().getName();
+
+        UserDAO userDAO = new UserDAOImpl();
+        GroupDAO groupDAO = new GroupDAOImpl();
+        Group group = null;
+        User user = null;
+
+        try {
+
+
+            if (groupDAO.getGroupbyId(id) == null)
+                throw new NotFoundException("Group with id = " + id + " not found");
+
+                group = groupDAO.getGroupbyId(id);
+                String creator = group.getCreator();
+
+            if(!groupDAO.checkUserInGroup(id, userid))
+                throw new ForbiddenException("You are not in the event");
+
+            if (userDAO.getUserByLoginid(loginuser) == null)
+                throw new NotFoundException("User with login = " + loginuser + " doesn't exists");
+
+                user = userDAO.getUserByLoginid(loginuser);
+
+            if(!groupDAO.checkUserInGroup(id,user.getId()))
+                throw new NotFoundException("The user is not in the group");
+
+            if (!userid.equals(creator))
+                throw new ForbiddenException("Only the creator can delete participants");
+
+
+            if (!groupDAO.deleteUserFromGroup(id,user.getId()))
+                throw new NotFoundException("Couldn't delete participant from group:  " + id);
+
+
+
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
 
     }
 
