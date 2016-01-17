@@ -100,7 +100,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>edu.upc.eetac.dsa.beeter.Main</mainClass>
+                            <mainClass>edu.upc.eetac.dsa.walka.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
