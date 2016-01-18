@@ -1,4 +1,4 @@
-var BASE_URI="http://192.168.1.33:8080/walka";
+var BASE_URI="http://147.83.7.204:8087/walka";
 
 function linksToMap(links){
 	var map = {};
@@ -88,6 +88,20 @@ $("#form-addPar").submit(function(event) {
   });
 });
 
+$("#form-addParty").submit(function(event) {
+ 	event.preventDefault();
+ 	console.log("estoy en el log party");
+ 	//$('#trParticipants').append($("<td></td>");
+	var loginid = $("#party").val();
+	var uri = $("#eventparty").val();
+	console.log(loginid);
+	console.log(uri);
+	addUserToEvent(uri, loginid, function(user){
+	console.log("añadiendo usuario");
+	console.log(user);
+	$('#participantes tr:last').after('<tr id="'+user.id+'"><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" rel="'+user.id+'"><i class="glyphicon glyphicon-trash icon-white"></i> Eliminar</a></td></tr>');			
+  });
+});
 
 $("#prof").click(function(event) {
  	event.preventDefault();
@@ -100,7 +114,32 @@ $("#prof").click(function(event) {
   	console.log(sessionStorage["tes"]);
 
 });
+
+
+ 
+ $(document).on('click', "a.btn", function(e) {
+  e.preventDefault();
+  console.log("se hace el click y este es el id:");
+  var id = "#"+$(this).attr('rel');
+  var uri = $(this).attr('srel');
+  console.log(id);
+  console.log(uri);
+  deleteUserFromEvent(uri,function(){ 
+   	$(id).remove(); 
+   });
+      
+});
+
 /*
+$(".btn btn-danger").click(function(id) {
+ 	event.preventDefault();
+ 	console.log("se hace el click y este es el id:");
+ 	var id = "#"+this.attr('rel');
+ 	console.log(id);
+	$(id).remove();
+});
+
+
 getProfile(uri,function(user){ 
    	 console.log("complete done...");
 	$("#suname").text('  '+user.fullname);
@@ -199,6 +238,20 @@ function logout(complete){
   	}).fail(function(){});
 }
 
+function deleteUserFromEvent(uri, complete){
+	var authToken = JSON.parse(sessionStorage["auth-token"]);
+	$.ajax({
+    	type: 'DELETE',
+   		url: uri,
+    	headers: {
+        	"X-Auth-Token":authToken.token
+    	}
+    }).done(function(data) { 
+    	console.log("user borrado del evento");
+    	complete();
+  	}).fail(function(){});
+}
+
 
 function getCurrentUserProfile(complete){
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
@@ -247,10 +300,13 @@ function getEvent(eventid, complete){
     		console.log("pinto el objeto evento desde getEvent");
     		console.log(event);
 			event.links = linksToMap(event.links);
+			
+			$('#eventparty').val(event.links.addUser.uri);
 		 	     
 			$.each(event.participants.users,function(i,user){
 				//$('#trParticipants tbody').append($("<td></td>")
-				$('#participantes tr:last').after('<tr><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" href="#"><i class="glyphicon glyphicon-trash icon-white"></i> Eliminar</a></td></tr>');
+				$('#participantes tr:last').after('<tr id="'+user.id+'"><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" rel="'+user.id+'" srel="'+event.links.deleteUser.uri+user.loginid+'"><i class="glyphicon glyphicon-trash icon-white"></i> Eliminar</a></td></tr>');
+				
 				//$("#trParticipants tbody").html('<tr><td> NO me pinta nada esta cosa'+user.fullname+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" href="#"><i class="glyphicon glyphicon-minus-sign"></i>Eliminar</a></td></tr>');
 				//$("#spanPart").append('uno más');
 				console.log(user.fullname);
@@ -268,18 +324,22 @@ function getEvent(eventid, complete){
 			});
 }
 
-function addUserToEvent(loginid, complete){
+		
+
+function addUserToEvent(uri, loginid, complete){
 		var authToken = JSON.parse(sessionStorage["auth-token"]);
-		var api = JSON.parse(sessionStorage.api);
-		var uri = api.login.uri;
-		$.post(uri,
+		console.log("esta es la uri de addUserToEvent");
+		console.log(uri);
+		var data = {loginuser: loginid}
+		$.ajax(
 			{
-				login: loginid,
-				password: password
-			}).done(function(authToken){
-				authToken.links = linksToMap(authToken.links);
-				sessionStorage["auth-token"] = JSON.stringify(authToken);
-				complete();
+				type: 'POST',
+				url: uri,
+				headers: {'X-Auth-Token':authToken.token},
+				crossDomain : true,
+				data: data
+			}).done(function(user){
+				complete(user);
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				var error = jqXHR.responseJSON;
 				alert(error.reason);

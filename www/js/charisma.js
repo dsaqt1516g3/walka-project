@@ -364,7 +364,7 @@ $("editarButton").click(function(event) {
             $("#popParticipants").append('<h6>Participantes:</h6><ul>');
             //$("#popParticipants").append('<h6>Participantes:</h6><ul>');	
 			$.each(event.participants.users,function(i,user){
-				$("#popParticipants").append('<li class="perf">'+user.fullname+'</li>');
+				$("#popParticipants").append('<li class="perf" rel="'+user.id+'">'+user.fullname+'</li>');
 			});
 			$("#popParticipants").append('</ul>');
 			$("#footerEdit").text('');
@@ -374,10 +374,13 @@ $("editarButton").click(function(event) {
 				$("#footer").text('');
 				$("#footer").html('<form id="eliminarEvento"><button type="submit" class="btn btn-primary">Eliminar</button></form>');
 			}
-			$("#popParticipants").on("click", ".perf", function(event){
-   			  	window.location.replace('perfil.html');
-  				var uri = "http://localhost:8080/walka/users/"+$("#prof").attr("rel");
+			$("#popParticipants").on("click", ".perf", function(e){
+				e.preventDefault();
+				console.log("esto pilla del rel de cada partiicpante");
+				console.log("http://localhost:8080/walka/users/"+$(this).attr('rel'));	  	
+  				var uri = "http://localhost:8080/walka/users/"+$(this).attr('rel');
   				sessionStorage["tes"] = uri;
+  				window.location.replace('perfil.html');
 			});
 			$("#eliminarEvento").submit(function(e) {
 				e.preventDefault();
