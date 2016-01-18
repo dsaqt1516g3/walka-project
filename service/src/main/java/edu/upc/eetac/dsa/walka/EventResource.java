@@ -292,6 +292,9 @@ public class EventResource {
             if (event == null)
                 throw new NotFoundException("Event with id = " + id + " not found");
 
+            if(iduserTodelete.equals(userid))
+                throw new ForbiddenException("No puedes eliminarte si eres el creador");
+
             if(!eventDAO.checkUserInEvent(id, userid))
                 throw new ForbiddenException("You are not in the event");
 

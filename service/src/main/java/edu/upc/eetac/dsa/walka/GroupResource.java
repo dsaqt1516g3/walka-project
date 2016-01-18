@@ -434,6 +434,9 @@ public class GroupResource {
             if(!groupDAO.checkUserInGroup(id,user.getId()))
                 throw new NotFoundException("El usuario no esta en el grupo");
 
+            if(userid.equals(user.getId()))
+                throw new ForbiddenException("No puede salir del grupo si eres el creador");
+
             if (!userid.equals(creator))
                 throw new ForbiddenException("Solo el creador del grupo puede echar a miembros");
 
