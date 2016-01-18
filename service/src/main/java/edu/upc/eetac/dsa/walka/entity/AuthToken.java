@@ -20,8 +20,14 @@ public class AuthToken {
             @InjectLink(resource = EventResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-event", title = "Create event", condition="${!empty instance.userid}", type=WalkaMediaType.WALKA_EVENT),
             @InjectLink(resource = UserResource.class, method="getUser", style = InjectLink.Style.ABSOLUTE, rel = "user-profile", title = "User profile", condition="${!empty instance.userid}", type= WalkaMediaType.WALKA_USER, bindings = @Binding(name = "id", value = "${instance.userid}")),
             @InjectLink(resource = CalendarResource.class, style = InjectLink.Style.ABSOLUTE, rel = "fill-calendar", title = "Events calendar", condition="${!empty instance.userid}"),
-            @InjectLink(value = "/calendar/between", style = InjectLink.Style.ABSOLUTE, rel = "between", title = "Between events", type = WalkaMediaType.WALKA_EVENT_COLLECTION)
-            })
+            @InjectLink(value = "/calendar/between", style = InjectLink.Style.ABSOLUTE, rel = "between", title = "Between events", type = WalkaMediaType.WALKA_EVENT_COLLECTION),
+            @InjectLink(value = "/groups", style = InjectLink.Style.ABSOLUTE, rel = "creategroup", title = "Create group"),
+            @InjectLink(value = "/groups", style = InjectLink.Style.ABSOLUTE, rel = "getgroups", title = "Get my groups"),
+            @InjectLink(value = "groups/invitations", style = InjectLink.Style.ABSOLUTE, rel = "checkinvitations", title = "Check invitations")
+
+
+
+    })
     private List<Link> links;
 
     private String userid;

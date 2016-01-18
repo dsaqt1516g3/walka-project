@@ -1,6 +1,8 @@
 package edu.upc.eetac.dsa.walka.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
@@ -13,6 +15,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Invitation {
     @InjectLinks({
+            @InjectLink(value = "/groups/{idgroup}/invitations/accept", style = InjectLink.Style.ABSOLUTE, rel = "acceptinvitation", title = "Accept invitation", bindings = @Binding(name = "idgroup", value = "${instance.idgroup}")),
+            @InjectLink(value = "/groups/{idgroup}/invitations/refuse", style = InjectLink.Style.ABSOLUTE, rel = "refuseinvitation", title = "Refuse invitation", bindings = @Binding(name = "idgroup", value = "${instance.idgroup}"))
+
 
     })
     private List<Link> links;
