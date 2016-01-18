@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+        ===
+        This comment should NOT be removed.
+
+        Charisma v2.0.0
+
+        Copyright 2012-2014 Muhammad Usman
+        Licensed under the Apache License v2.0
+        http://www.apache.org/licenses/LICENSE-2.0
+
+        http://usman.it
+        http://twitter.com/halalit_usman
+        ===
+    -->
+    <meta charset="utf-8">
+    <title>Free HTML5 Bootstrap Admin Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
+    <meta name="author" content="Muhammad Usman">
+
+    <!-- The styles -->
+    <link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet">
+
+    <link href="css/charisma-app.css" rel="stylesheet">
+    <link href='bower_components/fullcalendar/dist/fullcalendar.css' rel='stylesheet'>
+    <link href='bower_components/fullcalendar/dist/fullcalendar.print.css' rel='stylesheet' media='print'>
+    <link href='bower_components/chosen/chosen.min.css' rel='stylesheet'>
+    <link href='bower_components/colorbox/example3/colorbox.css' rel='stylesheet'>
+    <link href='bower_components/responsive-tables/responsive-tables.css' rel='stylesheet'>
+    <link href='bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css' rel='stylesheet'>
+    <link href='css/jquery.noty.css' rel='stylesheet'>
+    <link href='css/noty_theme_default.css' rel='stylesheet'>
+    <link href='css/elfinder.min.css' rel='stylesheet'>
+    <link href='css/elfinder.theme.css' rel='stylesheet'>
+    <link href='css/jquery.iphone.toggle.css' rel='stylesheet'>
+    <link href='css/uploadify.css' rel='stylesheet'>
+    <link href='css/animate.min.css' rel='stylesheet'>
+
+    <!-- jQuery -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
+
+    <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- The fav icon -->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:800' rel='stylesheet' type='text/css'>
+
+    <script>
+		$(document).ready(function(){
+		$("#editProf").hide();
+		   
+        getProfile(sessionStorage["tes"],function(user){ 
+       		$("#hiddenID").val(user.id);
+            $("#showname").html('<h1>'+user.fullname+'<br><small>'+user.loginid+'</h1>');
+            $("#showemail").html('<p><strong>Email:</strong> '+user.email+'</p>');
+            if(user.country)
+            $("#showpais").html('<p><b>País:</b> '+user.country+'</p>');
+            //$("#showbday").html('<p><b>Fecha de nacimiento:</b> '+user.birthday+'</p>');
+            if(user.phonenumber)
+            $("#showphone").html('<p><b>Teléfono:</b> '+user.phonenumber+'</p>');
+            if(user.city)
+            $("#showcity").html('<p><b>Ciudad:</b> '+user.city+'</p>');
+            if(authToken.userid === user.id)
+            $("#editPart").html('<button type="submit" class="btn btn-primary" id="editPartici">Editar</button>');
+            
+            $("#editPartici").click(function(e) {
+					e.preventDefault();
+				    $("#viewProf").hide();
+       			    $("#editProf").show();
+					$("#inputLoginid2").val(user.loginid);
+					//$("#inputPassword2").val();
+					$("#inputFullname").val(user.fullname);
+					$("#inputEmail").val(user.email);
+					//$("#inputRePassword").val();
+					if(user.country)
+					$("#inputCountry option:selected" ).text(user.country);
+					if(user.city)
+					$("#inputCity").val(user.city);
+					if(user.phonenumber)
+					$("#inputPhone").val(user.phonenumber);
+				});
+				
+			$("#form-update-user").submit(function(e) {
+					e.preventDefault();
+					user = new Object();
+					user.id = $("#hiddenID").val();
+					user.loginid = $("#inputLoginid2").val();
+					user.email  = $("#inputEmail").val();
+					//user.pass  = $("#inputPassword2").val(); 
+					user.fullname  = $("#inputFullname").val();
+					//user.repass  = $("#inputRePassword").val();
+					user.country = $("#inputCountry option:selected" ).text();
+					user.city  = $("#inputCity").val();
+					user.phonenumber  = $("#inputPhone").val();
+					
+					var uri = "http://localhost:8080/walka/users/"+$("#hiddenID").val();
+					
+					updateUser(uri,user,function(){
+						console.log("editado correctamente");
+						window.location.replace('calendar.html');
+					});
+				});
+            
+            
+  			 });
+  		 // });
+});
+</script>
+
+</head>
+
+<body>
+    <!-- topbar starts -->
+    <div class="navbar navbar-default" role="navigation">
+
+        <div class="navbar-inner" style="background-color:#425F9C;">
+            <button type="button" class="navbar-toggle pull-left animated flip">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> 
+                <span style="color: white; font-size: 16pt; font-family: 'Open Sans', sans-serif;"> Walka</span></a>
+
+            <!-- user dropdown starts -->
+ <div class="btn-group pull-right" style="width:auto"> 
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-user"></i><span class="hidden-sm hidden-xs" id="sname"> </span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="prof">Perfil</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#" id="lout">Cerrar sesión</a></li>
+                </ul>
+            </div>
+            <!-- user dropdown ends -->
+
+
+            <ul class="collapse navbar-collapse nav navbar-nav top-menu">
+                <li>
+                    <form class="navbar-search pull-left">
+                        <input placeholder="Buscar..." class="search-query form-control col-md-10" name="query"
+                               type="text">
+                    </form>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <!-- topbar ends -->
+<div class="ch-container">
+    <div class="row">
+        
+        <!-- left menu starts -->
+        <div class="col-sm-2 col-lg-2">
+            <div class="sidebar-nav">
+                <div class="nav-canvas">
+                    <div class="nav-sm nav nav-stacked">
+
+                    </div>
+                    <ul class="nav nav-pills nav-stacked main-menu">
+                        <li class="nav-header">Principal</li>
+                        <li><a class="ajax-link" href="calendar.html"><i class="glyphicon glyphicon-calendar"></i><span> Calendario</span></a></li>
+                        <li><a class="ajax-link" href="createevent.html"><i class=" glyphicon glyphicon-pencil"></i><span> Crear Evento</span></a></li>
+                        <li><a class="ajax-link" href="creargrupo.html"><i class="glyphicon glyphicon-random"></i><span> Crear Grupo</span></a></li>
+                        <li><a class="ajax-link" href="grid.html"><i class="glyphicon glyphicon-info-sign"></i><span> Invitaciones</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--/span-->
+        <!-- left menu ends -->
+
+        <noscript>
+            <div class="alert alert-block col-md-12">
+                <h4 class="alert-heading">Warning!</h4>
+
+                <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a>
+                    enabled to use this site.</p>
+            </div>
+        </noscript>
+
+        <div id="content" class="col-lg-10 col-sm-10">
+            <!-- content starts -->
+            <div>
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Principal</a>
+        </li>
+        <li>
+            <a href="#">Perfil</a>
+        </li>
+    </ul>
+</div>
+<div class="row" id="viewProf">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-info-sign"></i> Perfil</h2>
+            </div>
+            <div class="box-content row">
+                <div class="col-lg-7 col-md-12">
+                    <span id="showname"></span>
+                    
+                    <span id="showphone"></span>
+                    
+                    <span id="showemail"></span>
+
+                    <span id="showpais"></span>
+                    
+                    <!--<span id="showbday"></span>-->
+                    
+                    <span id="showcity"></span>
+                    
+                    <span id="editPart"></span>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="editProf">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well">
+                <h2><i class="glyphicon glyphicon-info-sign"></i> Editar Perfil</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-setting btn-round btn-default"><i
+                            class="glyphicon glyphicon-cog"></i></a>
+                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                            class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a href="#" class="btn btn-close btn-round btn-default"><i
+                            class="glyphicon glyphicon-remove"></i></a>
+                </div>
+            </div>
+            <div class="box-content row">
+                <div class="col-md-12">
+                    <h4>Modifica los valores que quieres cambiar: <br><br>
+                    </h4>
+<!-- El form -->
+            <form class="form-horizontal" id="form-update-user">
+                <fieldset>
+                	<input type="hidden" id="hiddenID" value="">
+                
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-glass red"></i></span>
+                        <input type="text" class="form-control" id="inputLoginid2" placeholder="Username">
+                    </div>
+                    <div class="clearfix"></div><br>
+                    
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
+                        <input type="text" class="form-control" id="inputFullname" placeholder="Nombre completo">
+                    </div>
+                    <div class="clearfix"></div><br>
+                    
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope red"></i></span>
+                        <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+                    </div>
+                    <div class="clearfix"></div><br>
+                    
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker red"></i></span>
+                    
+<select name="pais" class="form-control" id="inputCountry">
+<option value="AF">Afganistán</option>
+<option value="AL">Albania</option>
+<option value="DE">Alemania</option>
+<option value="AD">Andorra</option>
+<option value="AO">Angola</option>
+<option value="AI">Anguilla</option>
+<option value="AQ">Antártida</option>
+<option value="AG">Antigua y Barbuda</option>
+<option value="AN">Antillas Holandesas</option>
+<option value="SA">Arabia Saudí</option>
+<option value="DZ">Argelia</option>
+<option value="AR">Argentina</option>
+<option value="AM">Armenia</option>
+<option value="AW">Aruba</option>
+<option value="AU">Australia</option>
+<option value="AT">Austria</option>
+<option value="AZ">Azerbaiyán</option>
+<option value="BS">Bahamas</option>
+<option value="BH">Bahrein</option>
+<option value="BD">Bangladesh</option>
+<option value="BB">Barbados</option>
+<option value="BE">Bélgica</option>
+<option value="BZ">Belice</option>
+<option value="BJ">Benin</option>
+<option value="BM">Bermudas</option>
+<option value="BY">Bielorrusia</option>
+<option value="MM">Birmania</option>
+<option value="BO">Bolivia</option>
+<option value="BA">Bosnia y Herzegovina</option>
+<option value="BW">Botswana</option>
+<option value="BR">Brasil</option>
+<option value="BN">Brunei</option>
+<option value="BG">Bulgaria</option>
+<option value="BF">Burkina Faso</option>
+<option value="BI">Burundi</option>
+<option value="BT">Bután</option>
+<option value="CV">Cabo Verde</option>
+<option value="KH">Camboya</option>
+<option value="CM">Camerún</option>
+<option value="CA">Canadá</option>
+<option value="TD">Chad</option>
+<option value="CL">Chile</option>
+<option value="CN">China</option>
+<option value="CY">Chipre</option>
+<option value="VA">Ciudad del Vaticano (Santa Sede)</option>
+<option value="CO">Colombia</option>
+<option value="KM">Comores</option>
+<option value="CG">Congo</option>
+<option value="CD">Congo, República Democrática del</option>
+<option value="KR">Corea</option>
+<option value="KP">Corea del Norte</option>
+<option value="CI">Costa de Marfíl</option>
+<option value="CR">Costa Rica</option>
+<option value="HR">Croacia (Hrvatska)</option>
+<option value="CU">Cuba</option>
+<option value="DK">Dinamarca</option>
+<option value="DJ">Djibouti</option>
+<option value="DM">Dominica</option>
+<option value="EC">Ecuador</option>
+<option value="EG">Egipto</option>
+<option value="SV">El Salvador</option>
+<option value="AE">Emiratos Árabes Unidos</option>
+<option value="ER">Eritrea</option>
+<option value="SI">Eslovenia</option>
+<option value="ES" selected>España</option>
+<option value="US">Estados Unidos</option>
+<option value="EE">Estonia</option>
+<option value="ET">Etiopía</option>
+<option value="FJ">Fiji</option>
+<option value="PH">Filipinas</option>
+<option value="FI">Finlandia</option>
+<option value="FR">Francia</option>
+<option value="GA">Gabón</option>
+<option value="GM">Gambia</option>
+<option value="GE">Georgia</option>
+<option value="GH">Ghana</option>
+<option value="GI">Gibraltar</option>
+<option value="GD">Granada</option>
+<option value="GR">Grecia</option>
+<option value="GL">Groenlandia</option>
+<option value="GP">Guadalupe</option>
+<option value="GU">Guam</option>
+<option value="GT">Guatemala</option>
+<option value="GY">Guayana</option>
+<option value="GF">Guayana Francesa</option>
+<option value="GN">Guinea</option>
+<option value="GQ">Guinea Ecuatorial</option>
+<option value="GW">Guinea-Bissau</option>
+<option value="HT">Haití</option>
+<option value="HN">Honduras</option>
+<option value="HU">Hungría</option>
+<option value="IN">India</option>
+<option value="ID">Indonesia</option>
+<option value="IQ">Irak</option>
+<option value="IR">Irán</option>
+<option value="IE">Irlanda</option>
+<option value="BV">Isla Bouvet</option>
+<option value="CX">Isla de Christmas</option>
+<option value="IS">Islandia</option>
+<option value="KY">Islas Caimán</option>
+<option value="CK">Islas Cook</option>
+<option value="CC">Islas de Cocos o Keeling</option>
+<option value="FO">Islas Faroe</option>
+<option value="HM">Islas Heard y McDonald</option>
+<option value="FK">Islas Malvinas</option>
+<option value="MP">Islas Marianas del Norte</option>
+<option value="MH">Islas Marshall</option>
+<option value="UM">Islas menores de Estados Unidos</option>
+<option value="PW">Islas Palau</option>
+<option value="SB">Islas Salomón</option>
+<option value="SJ">Islas Svalbard y Jan Mayen</option>
+<option value="TK">Islas Tokelau</option>
+<option value="TC">Islas Turks y Caicos</option>
+<option value="VI">Islas Vírgenes (EEUU)</option>
+<option value="VG">Islas Vírgenes (Reino Unido)</option>
+<option value="WF">Islas Wallis y Futuna</option>
+<option value="IL">Israel</option>
+<option value="IT">Italia</option>
+<option value="JM">Jamaica</option>
+<option value="JP">Japón</option>
+<option value="JO">Jordania</option>
+<option value="KZ">Kazajistán</option>
+<option value="KE">Kenia</option>
+<option value="KG">Kirguizistán</option>
+<option value="KI">Kiribati</option>
+<option value="KW">Kuwait</option>
+<option value="LA">Laos</option>
+<option value="LS">Lesotho</option>
+<option value="LV">Letonia</option>
+<option value="LB">Líbano</option>
+<option value="LR">Liberia</option>
+<option value="LY">Libia</option>
+<option value="LI">Liechtenstein</option>
+<option value="LT">Lituania</option>
+<option value="LU">Luxemburgo</option>
+<option value="MK">Macedonia, Ex-República Yugoslava de</option>
+<option value="MG">Madagascar</option>
+<option value="MY">Malasia</option>
+<option value="MW">Malawi</option>
+<option value="MV">Maldivas</option>
+<option value="ML">Malí</option>
+<option value="MT">Malta</option>
+<option value="MA">Marruecos</option>
+<option value="MQ">Martinica</option>
+<option value="MU">Mauricio</option>
+<option value="MR">Mauritania</option>
+<option value="YT">Mayotte</option>
+<option value="MX">México</option>
+<option value="FM">Micronesia</option>
+<option value="MD">Moldavia</option>
+<option value="MC">Mónaco</option>
+<option value="MN">Mongolia</option>
+<option value="MS">Montserrat</option>
+<option value="MZ">Mozambique</option>
+<option value="NA">Namibia</option>
+<option value="NR">Nauru</option>
+<option value="NP">Nepal</option>
+<option value="NI">Nicaragua</option>
+<option value="NE">Níger</option>
+<option value="NG">Nigeria</option>
+<option value="NU">Niue</option>
+<option value="NF">Norfolk</option>
+<option value="NO">Noruega</option>
+<option value="NC">Nueva Caledonia</option>
+<option value="NZ">Nueva Zelanda</option>
+<option value="OM">Omán</option>
+<option value="NL">Países Bajos</option>
+<option value="PA">Panamá</option>
+<option value="PG">Papúa Nueva Guinea</option>
+<option value="PK">Paquistán</option>
+<option value="PY">Paraguay</option>
+<option value="PE">Perú</option>
+<option value="PN">Pitcairn</option>
+<option value="PF">Polinesia Francesa</option>
+<option value="PL">Polonia</option>
+<option value="PT">Portugal</option>
+<option value="PR">Puerto Rico</option>
+<option value="QA">Qatar</option>
+<option value="UK">Reino Unido</option>
+<option value="CF">República Centroafricana</option>
+<option value="CZ">República Checa</option>
+<option value="ZA">República de Sudáfrica</option>
+<option value="DO">República Dominicana</option>
+<option value="SK">República Eslovaca</option>
+<option value="RE">Reunión</option>
+<option value="RW">Ruanda</option>
+<option value="RO">Rumania</option>
+<option value="RU">Rusia</option>
+<option value="EH">Sahara Occidental</option>
+<option value="KN">Saint Kitts y Nevis</option>
+<option value="WS">Samoa</option>
+<option value="AS">Samoa Americana</option>
+<option value="SM">San Marino</option>
+<option value="VC">San Vicente y Granadinas</option>
+<option value="SH">Santa Helena</option>
+<option value="LC">Santa Lucía</option>
+<option value="ST">Santo Tomé y Príncipe</option>
+<option value="SN">Senegal</option>
+<option value="SC">Seychelles</option>
+<option value="SL">Sierra Leona</option>
+<option value="SG">Singapur</option>
+<option value="SY">Siria</option>
+<option value="SO">Somalia</option>
+<option value="LK">Sri Lanka</option>
+<option value="PM">St Pierre y Miquelon</option>
+<option value="SZ">Suazilandia</option>
+<option value="SD">Sudán</option>
+<option value="SE">Suecia</option>
+<option value="CH">Suiza</option>
+<option value="SR">Surinam</option>
+<option value="TH">Tailandia</option>
+<option value="TW">Taiwán</option>
+<option value="TZ">Tanzania</option>
+<option value="TJ">Tayikistán</option>
+<option value="TF">Territorios franceses del Sur</option>
+<option value="TP">Timor Oriental</option>
+<option value="TG">Togo</option>
+<option value="TO">Tonga</option>
+<option value="TT">Trinidad y Tobago</option>
+<option value="TN">Túnez</option>
+<option value="TM">Turkmenistán</option>
+<option value="TR">Turquía</option>
+<option value="TV">Tuvalu</option>
+<option value="UA">Ucrania</option>
+<option value="UG">Uganda</option>
+<option value="UY">Uruguay</option>
+<option value="UZ">Uzbekistán</option>
+<option value="VU">Vanuatu</option>
+<option value="VE">Venezuela</option>
+<option value="VN">Vietnam</option>
+<option value="YE">Yemen</option>
+<option value="YU">Yugoslavia</option>
+<option value="ZM">Zambia</option>
+<option value="ZW">Zimbabue</option>
+</select>
+                    </div>
+                    <div class="clearfix"></div><br>
+                    
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar red"></i></span>
+                        <input type="text" class="form-control" id="inputBDay" placeholder="Fecha de nacimiento">
+                    </div>
+                    <div class="clearfix"></div><br>
+
+                    <p class="center col-md-12">
+                        <button type="submit" class="btn btn-primary">Actualizar perfil</button>
+                    </p>
+
+                </fieldset>
+            </form>
+
+<!-- End el form -->
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- content ends -->
+    </div><!--/#content.col-md-0-->
+</div><!--/fluid-row-->
+
+   
+
+    <hr>
+
+
+    <footer class="row">
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="https://github.com/dsaqt1516g3/walka-project" target="_blank">DSA grup 3: Marta, Sergio & Andreas</p>
+
+    </footer>
+
+</div><!--/.fluid-container-->
+
+<!-- external javascript -->
+<script type="text/javascript" src="calendar.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- library for cookie management -->
+<script src="js/jquery.cookie.js"></script>
+<!-- calender plugin -->
+<script src='bower_components/moment/min/moment.min.js'></script>
+<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+<!-- data table plugin -->
+<script src='js/jquery.dataTables.min.js'></script>
+
+<!-- select or dropdown enhancer -->
+<script src="bower_components/chosen/chosen.jquery.min.js"></script>
+<!-- plugin for gallery image view -->
+<script src="bower_components/colorbox/jquery.colorbox-min.js"></script>
+<!-- notification plugin -->
+<script src="js/jquery.noty.js"></script>
+<!-- library for making tables responsive -->
+<script src="bower_components/responsive-tables/responsive-tables.js"></script>
+<!-- tour plugin -->
+<script src="bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
+<!-- star rating plugin -->
+<script src="js/jquery.raty.min.js"></script>
+<!-- for iOS style toggle switch -->
+<script src="js/jquery.iphone.toggle.js"></script>
+<!-- autogrowing textarea plugin -->
+<script src="js/jquery.autogrow-textarea.js"></script>
+<!-- multiple file upload plugin -->
+<script src="js/jquery.uploadify-3.1.min.js"></script>
+<!-- history.js for cross-browser state change on ajax -->
+<script src="js/jquery.history.js"></script>
+<!-- application script for Charisma demo -->
+<script src="js/charisma.js"></script>
+
+
+</body>
+</html>
