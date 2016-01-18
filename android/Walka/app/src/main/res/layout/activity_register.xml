@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="edu.upc.eetac.dsa.walka.RegisterActivity">
+
+    <!-- Register progress -->
+    <ProgressBar android:id="@+id/register_progress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:drawableBottom="@mipmap/ic_launcher"
+        android:gravity="center_horizontal"
+        android:text="Register"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ScrollView
+        android:id="@+id/register_form"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dip"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/lUsername"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <EditText
+                    android:id="@+id/Username"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dip"
+                    android:layout_marginTop="5dip"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:hint="username"/>
+
+                <TextView
+                    android:id="@+id/IUname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <EditText
+                    android:id="@+id/Name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dip"
+                    android:layout_marginTop="5dip"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:hint="Name Surname"/>
+
+                <TextView
+                    android:id="@+id/IUemail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email "
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>/>
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:hint="user@walka.com"
+                    android:layout_marginBottom="20dip"
+                    />
+                <TextView
+                    android:id="@+id/lPassword"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>/>
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:password="true"
+                    android:hint="******"
+                    android:layout_marginBottom="20dip"
+                    />
+
+                <TextView
+                    android:id="@+id/lPassword2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Repeat Password"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>/>
+
+                <EditText
+                    android:id="@+id/etPassword2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:password="true"
+                    android:hint="********"
+                    android:layout_marginBottom="20dip"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/bCancel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="50"
+                        android:onClick="cancel"
+                        android:text="Cancel"
+                        android:layout_gravity="bottom"
+                        android:textSize="16dp"
+                        android:layout_marginRight="5dp"
+
+                        />
+
+                    <Button
+                        android:id="@+id/bDone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="50"
+                        android:onClick="done"
+                        android:text="Done"
+                        android:layout_gravity="bottom"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+</LinearLayout>
+

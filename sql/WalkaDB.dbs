@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MySql" id="Project_2e46a793" html="y" template="Default" database="MySql" >
+	<schema name="walkadb" catalogname="walkadb" >
+		<table name="auth_tokens" >
+			<column name="token" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="userid" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<index name="pk_auth_tokens" unique="PRIMARY_KEY" >
+				<column name="token" />
+			</index>
+			<index name="userid" unique="NORMAL" >
+				<column name="userid" />
+			</index>
+			<fk name="auth_tokens_ibfk_1" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="userid" pk="id" />
+			</fk>
+		</table>
+		<table name="checklists" >
+			<column name="idevent" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="indexlist" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="textlist" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<column name="done" type="bit" decimal="0" jt="-7" mandatory="y" />
+			<index name="idevent" unique="NORMAL" >
+				<column name="idevent" />
+			</index>
+			<fk name="checklists_ibfk_1" to_schema="walkadb" to_table="events" delete_action="cascade" >
+				<fk_column name="idevent" pk="id" />
+			</fk>
+		</table>
+		<table name="events" >
+			<column name="id" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="title" type="varchar" length="30" decimal="0" jt="12" mandatory="y" />
+			<column name="creator" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="location" type="varchar" length="60" decimal="0" jt="12" mandatory="y" />
+			<column name="notes" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<column name="startdate" type="datetime" length="19" decimal="0" jt="93" mandatory="y" />
+			<column name="enddate" type="datetime" length="19" decimal="0" jt="93" mandatory="y" />
+			<column name="last_modified" type="timestamp" length="19" decimal="0" jt="93" mandatory="y" >
+				<defo>CURRENT_TIMESTAMP</defo>
+			</column>
+			<column name="creation_timestamp" type="datetime" length="19" decimal="0" jt="93" mandatory="y" >
+				<defo>CURRENT_TIMESTAMP</defo>
+			</column>
+			<index name="pk_events" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="creator" unique="NORMAL" >
+				<column name="creator" />
+			</index>
+			<fk name="events_ibfk_1" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="creator" pk="id" />
+			</fk>
+		</table>
+		<table name="groups" >
+			<column name="id" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="idcreator" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="gname" type="varchar" length="100" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_groups" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idcreator" unique="NORMAL" >
+				<column name="idcreator" />
+			</index>
+			<fk name="groups_ibfk_1" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="idcreator" pk="id" />
+			</fk>
+		</table>
+		<table name="invitations" >
+			<column name="idevent" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="idcreator" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="iduser" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="invitaccept" type="bit" decimal="0" jt="-7" mandatory="y" />
+			<index name="idcreator" unique="NORMAL" >
+				<column name="idcreator" />
+			</index>
+			<index name="idevent" unique="NORMAL" >
+				<column name="idevent" />
+			</index>
+			<index name="iduser" unique="NORMAL" >
+				<column name="iduser" />
+			</index>
+			<fk name="invitations_ibfk_1" to_schema="walkadb" to_table="events" delete_action="cascade" >
+				<fk_column name="idevent" pk="id" />
+			</fk>
+			<fk name="invitations_ibfk_2" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="iduser" pk="id" />
+			</fk>
+			<fk name="invitations_ibfk_3" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="idcreator" pk="id" />
+			</fk>
+		</table>
+		<table name="repo_files" >
+			<column name="idrepo" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="fname" type="varchar" length="500" decimal="0" jt="12" mandatory="y" />
+			<index name="idrepo" unique="NORMAL" >
+				<column name="idrepo" />
+			</index>
+			<fk name="repo_files_ibfk_1" to_schema="walkadb" to_table="repositories" delete_action="cascade" >
+				<fk_column name="idrepo" pk="idevent" />
+			</fk>
+		</table>
+		<table name="repositories" >
+			<column name="id" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="idevent" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="last_modified" type="timestamp" length="19" decimal="0" jt="93" mandatory="y" >
+				<defo>CURRENT_TIMESTAMP</defo>
+			</column>
+			<column name="creation_timestamp" type="datetime" length="19" decimal="0" jt="93" mandatory="y" >
+				<defo>CURRENT_TIMESTAMP</defo>
+			</column>
+			<index name="pk_repositories" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idevent" unique="NORMAL" >
+				<column name="idevent" />
+			</index>
+			<fk name="repositories_ibfk_1" to_schema="walkadb" to_table="events" delete_action="cascade" >
+				<fk_column name="idevent" pk="id" />
+			</fk>
+		</table>
+		<table name="user_events" >
+			<column name="idevent" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="iduser" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<index name="idevent" unique="NORMAL" >
+				<column name="idevent" />
+			</index>
+			<index name="iduser" unique="NORMAL" >
+				<column name="iduser" />
+			</index>
+			<fk name="user_events_ibfk_1" to_schema="walkadb" to_table="events" delete_action="cascade" >
+				<fk_column name="idevent" pk="id" />
+			</fk>
+			<fk name="user_events_ibfk_2" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="iduser" pk="id" />
+			</fk>
+		</table>
+		<table name="user_groups" >
+			<column name="idgroup" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="iduser" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<index name="idgroup" unique="NORMAL" >
+				<column name="idgroup" />
+			</index>
+			<index name="iduser" unique="NORMAL" >
+				<column name="iduser" />
+			</index>
+			<fk name="user_groups_ibfk_1" to_schema="walkadb" to_table="groups" delete_action="cascade" >
+				<fk_column name="idgroup" pk="id" />
+			</fk>
+			<fk name="user_groups_ibfk_2" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="iduser" pk="id" />
+			</fk>
+		</table>
+		<table name="user_roles" >
+			<column name="userid" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="role" type="enum" length="6" decimal="0" jt="12" mandatory="y" >
+				<defo>&#039;admin&#039;</defo>
+				<enumeration>&#039;admin&#039;</enumeration>
+			</column>
+			<index name="pk_user_roles" unique="PRIMARY_KEY" >
+				<column name="userid" />
+				<column name="role" />
+			</index>
+			<fk name="user_roles_ibfk_1" to_schema="walkadb" to_table="users" delete_action="cascade" >
+				<fk_column name="userid" pk="id" />
+			</fk>
+		</table>
+		<table name="users" >
+			<column name="id" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="loginid" type="varchar" length="15" decimal="0" jt="12" mandatory="y" />
+			<column name="password" type="binary" length="16" decimal="0" jt="-2" mandatory="y" />
+			<column name="email" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="fullname" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_users" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="loginid" unique="UNIQUE" >
+				<column name="loginid" />
+			</index>
+		</table>
+	</schema>
+	<connector name="MySql" database="MySql" driver_class="com.mysql.jdbc.Driver" driver_jar="mysql-connector-java-5.1.36-bin.jar" host="localhost" port="3306" instance="walkadb" user="root" />
+	<layout id="Layout_c5d70d1" name="walkadb" show_relation_columns="y" >
+		<entity schema="walkadb" name="checklists" color="f5ddbf" x="390" y="315" />
+		<entity schema="walkadb" name="invitations" color="c8f5bf" x="45" y="435" />
+		<entity schema="walkadb" name="repo_files" color="f5ddbf" x="600" y="315" />
+		<entity schema="walkadb" name="user_groups" color="bfd4f5" x="195" y="45" />
+		<entity schema="walkadb" name="users" color="bfd4f5" x="45" y="45" />
+		<entity schema="walkadb" name="auth_tokens" color="bfd4f5" x="45" y="225" />
+		<entity schema="walkadb" name="repositories" color="f5ddbf" x="600" y="45" />
+		<entity schema="walkadb" name="events" color="f5ddbf" x="390" y="45" />
+		<entity schema="walkadb" name="user_events" color="c8f5bf" x="195" y="435" />
+		<entity schema="walkadb" name="groups" color="bfd4f5" x="195" y="225" />
+		<entity schema="walkadb" name="user_roles" color="c8f5bf" x="195" y="600" />
+		<script name="idevent" id="SQL_2f1c7ef1" >
+			<string><![CDATA[SELECT idevent
+FROM
+	walkadb.user_events s;]]></string>
+		</script>
+		<browser id="Browse_1fbd765f" name="users" >
+			<browse_table schema="walkadb" entity="users" x="-2147483648" y="-2147483648" width="-2147483648" height="-2147483648" >
+				<browse_table schema="walkadb" entity="auth_tokens" fk="auth_tokens_ibfk_1" x="-2147483648" y="-2147483648" width="-2147483648" height="-2147483648" />
+			</browse_table>
+		</browser>
+	</layout>
+</project>
