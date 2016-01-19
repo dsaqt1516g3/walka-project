@@ -106,13 +106,35 @@ $(document).ready(function () {
 });
 
 $(function(){
+         
    getCurrentUserProfile(function(user){ 
    		//hidden-sm hidden-xs
-   	  $("#sname").text('  '+user.fullname);
+   	 $("#sname").text('  '+user.fullname);
       //$("#prof").attr("href", "http://www.google.com/");
       $("#prof").attr("rel", user.id);
+      //$("#prof").attr("href", "http://www.google.com/");
+      //$("#prof").attr("rel", user.id);
    });
+	/*getCurrentInvitations(function(data){ 
+	console.log(data);
+   		 $("#invit").html('  Invitaciones <b style="color:red">( '+data.invitations.length+' )<b>');
+   		 
+   		 $("#popCreator").text('');
+            $("#popCreator").html('<h4>Invitaciones</h4>');
+            $("#popLocation").text('');
+            $("#popLocation").text('¡No dejes que se acumulen!');
+   		 $.each(data.invitations,function(i,invite){
+   		 		invite.links = linksToMap(invite.links);
+   		 		console.log("uris:");
+   		 		console.log(invite.links.acceptinvitation.uri);
+   		 		console.log(invite.links.refuseinvitation.uri);
+				$("#popEvent").append('<form id="adInvi"><div class="form-group"><b>'+invite.groupInvitator.creatorName+'</b> te ha invitado a unirse al grupo: <b>'+invite.groupInvitator.name+'</b><br><button type="submit" class="btn btn-default" rel="'+invite.links.acceptinvitation.uri+'">Acceptar</button><button type="submit" class="btn btn-default" rel"'+invite.links.refuseinvitation.uri+'">Rechazar</button></div></form>');
+			});
 
+		
+   });  
+   */
+   
 });
 
 
