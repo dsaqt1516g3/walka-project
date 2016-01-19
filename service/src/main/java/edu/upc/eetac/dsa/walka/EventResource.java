@@ -66,7 +66,7 @@ public class EventResource {
     @Path("/{id}")
     @GET
     @Produces(WalkaMediaType.WALKA_EVENT)
-    public Response getEvent(@PathParam("id") String id, @Context Request request) {
+    public Event getEvent(@PathParam("id") String id, @Context Request request) {
         // Create cache-control
 
         String userid = securityContext.getUserPrincipal().getName();
@@ -88,7 +88,7 @@ public class EventResource {
 
             event.setColor(eventDAO.getColour(id,userid));
 
-
+/*
             // Calculate the ETag on last modified date of user resource
             EntityTag eTag = new EntityTag(Long.toString(event.getLastModified()));
 
@@ -106,6 +106,8 @@ public class EventResource {
             // Get the updated representation and return with Etag attached to it
             rb = Response.ok(event).cacheControl(cacheControl).tag(eTag);
             return rb.build();
+            */
+            return event;
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }
