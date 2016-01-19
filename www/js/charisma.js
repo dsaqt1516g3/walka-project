@@ -377,8 +377,8 @@ $("editarButton").click(function(event) {
 			$("#popParticipants").on("click", ".perf", function(e){
 				e.preventDefault();
 				console.log("esto pilla del rel de cada partiicpante");
-				console.log("http://localhost:8080/walka/users/"+$(this).attr('rel'));	  	
-  				var uri = "http://localhost:8080/walka/users/"+$(this).attr('rel');
+				console.log("http://localhost:8087/walka/users/"+$(this).attr('rel'));	  	
+  				var uri = "http://localhost:8087/walka/users/"+$(this).attr('rel');
   				sessionStorage["tes"] = uri;
   				window.location.replace('perfil.html');
 			});

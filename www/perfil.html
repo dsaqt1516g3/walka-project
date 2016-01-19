@@ -84,6 +84,15 @@
 					$("#inputCity").val(user.city);
 					if(user.phonenumber)
 					$("#inputPhone").val(user.phonenumber);
+					
+					/*
+					                    <iframe
+ 					 width="600"
+ 					 height="450"
+					 frameborder="0" style="border:0"
+ 					 src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAVBTms6bsNAjXpPlqVSRoEy4LHOxJYygo&q='++'" allowfullscreen>
+					</iframe>
+					*/
 				});
 				
 			$("#form-update-user").submit(function(e) {
@@ -99,7 +108,7 @@
 					user.city  = $("#inputCity").val();
 					user.phonenumber  = $("#inputPhone").val();
 					
-					var uri = "http://localhost:8080/walka/users/"+$("#hiddenID").val();
+					var uri = "http://localhost:8087/walka/users/"+$("#hiddenID").val();
 					
 					updateUser(uri,user,function(){
 						console.log("editado correctamente");
@@ -515,8 +524,8 @@
                     <div class="clearfix"></div><br>
                     
                     <div class="input-group input-group-lg">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar red"></i></span>
-                        <input type="text" class="form-control" id="inputBDay" placeholder="Fecha de nacimiento">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-picture red"></i></span>
+                        <input type="text" class="form-control" id="inputCity" placeholder="Ciudad">
                     </div>
                     <div class="clearfix"></div><br>
 

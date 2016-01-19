@@ -1,4 +1,4 @@
-var BASE_URI="http://147.83.7.204:8087/walka";
+var BASE_URI="http://192.168.1.33:8087/walka";
 
 function linksToMap(links){
 	var map = {};
@@ -70,7 +70,9 @@ $("#form-create-event").submit(function(event) {
 	alert("Rellena todos los campos para poder crear el evento."); 
 	} else {
 	createEvent(event, function(event){ 
-		console.log("Primer paso: done.");
+		console.log("Primer paso: done.");  
+		$("#divform-create-event").hide();
+        $("#divform-addPar").show();
 		$("#eventid").val(event.id);
 		console.log("He puesto el hidden:");
 		console.log($("#eventid").val());
@@ -78,13 +80,47 @@ $("#form-create-event").submit(function(event) {
    }
 });
 
+$("#form-create-group").submit(function(event) {
+  event.preventDefault();
+  
+   var group = new Object();
+
+	group.name = $("#cgTitle").val();
+	group.description  = $("textarea#cgDescription").val();
+	if((group.name.length == 0) || (group.description.length == 0)){
+	alert("Rellena todos los campos para poder crear el grupo."); 
+	} else {
+	createGroup(group, function(group){ 
+		console.log("Primer paso: done.");  
+		$("#divform-create-group").hide();
+        $("#divform-addPar2").show();
+		$("#groupid").val(group.id);
+		console.log("He puesto el hidden:");
+		console.log($("#groupid").val());
+   });
+   }
+});
+
+
 $("#form-addPar").submit(function(event) {
  	event.preventDefault();
  	//$('#trParticipants').append($("<td></td>");
 	eventid = $("#eventid").val();
 	getEvent(eventid, function(){
   	console.log("el complete del get event");
+  	$("#createEventRow").hide();
+    $("#addUsersRow").show(); 
+  });
+});
 
+$("#form-addPar2").submit(function(event) {
+ 	event.preventDefault();
+ 	//$('#trParticipants').append($("<td></td>");
+	groupid = $("#groupid").val();
+	getGroup(groupid, function(){
+  	console.log("el complete del get group");
+  	$("#createGroupRow").hide();
+    $("#addUsersRow2").show(); 
   });
 });
 
@@ -94,13 +130,32 @@ $("#form-addParty").submit(function(event) {
  	//$('#trParticipants').append($("<td></td>");
 	var loginid = $("#party").val();
 	var uri = $("#eventparty").val();
+	var deleteu = $("#deleteeventparty").val();
+	
 	console.log(loginid);
 	console.log(uri);
 	addUserToEvent(uri, loginid, function(user){
 	console.log("añadiendo usuario");
 	console.log(user);
-	$('#participantes tr:last').after('<tr id="'+user.id+'"><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" rel="'+user.id+'"><i class="glyphicon glyphicon-trash icon-white"></i> Eliminar</a></td></tr>');			
-  });
+	$('#participantes tr:last').after('<tr id="'+user.id+'"><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" rel="'+user.id+'" srel="'+deleteu+user.loginid+'"><i class="glyphicon glyphicon-trash icon-white"></i> Eliminar</a></td></tr>');
+	 });
+});
+
+$("#form-addParty2").submit(function(event) {
+ 	event.preventDefault();
+ 	console.log("estoy en el log party numer 2");
+ 	//$('#trParticipants').append($("<td></td>");
+	var loginid = $("#gparty").val();
+	var uri = $("#groupparty").val();
+	var deleteu = $("#deletegroupparty").val();
+	
+	console.log(loginid);
+	console.log(uri);
+	addUserToGroup(uri, loginid, function(user){
+	console.log("añadiendo usuario");
+	console.log(user);
+	$('#participantes tr:last').after('<tr id="'+user.id+'"><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><span class="label-warning label label-default">Pendiente...</span></td></tr>');
+	 });
 });
 
 $("#prof").click(function(event) {
@@ -108,26 +163,11 @@ $("#prof").click(function(event) {
   	console.log("Has clicado a hashtag profile");
   	console.log($('#prof').attr('rel'));
   	window.location.replace('perfil.html');
-  	var uri = "http://localhost:8080/walka/users/"+$("#prof").attr("rel");
+  	var uri = "http://localhost:8087/walka/users/"+$("#prof").attr("rel");
   	sessionStorage["tes"] = uri;
   	console.log("console log del session sotrage");
   	console.log(sessionStorage["tes"]);
 
-});
-
-
- 
- $(document).on('click', "a.btn", function(e) {
-  e.preventDefault();
-  console.log("se hace el click y este es el id:");
-  var id = "#"+$(this).attr('rel');
-  var uri = $(this).attr('srel');
-  console.log(id);
-  console.log(uri);
-  deleteUserFromEvent(uri,function(){ 
-   	$(id).remove(); 
-   });
-      
 });
 
 /*
@@ -197,7 +237,7 @@ function register(logini, fullname, email, password, country, city, phone, compl
 }
 
 function createEvent(event, complete){
-		var uri = "http://localhost:8080/walka/events";
+		var uri = "http://localhost:8087/walka/events";
 		var authToken = JSON.parse(sessionStorage["auth-token"]);
 		//console.log(authToken.token);
 		//var data = JSON.stringify(event);
@@ -220,6 +260,30 @@ function createEvent(event, complete){
 			}
 	);
 	}
+	
+function createGroup(group, complete){
+		var authToken = JSON.parse(sessionStorage["auth-token"]);
+		var uri = authToken.links.creategroup.uri;
+		console.log(uri);
+		//var data = JSON.stringify(event);
+		$.ajax(
+			{
+				type: 'POST',
+				url: uri,
+				headers: {'X-Auth-Token':authToken.token},
+				crossDomain : true,
+				data: group,
+			}).done(function(group){
+			/*event.links = linksToMap(event.links);
+			window.location.replace('tables.html');*/
+			complete(group);
+		})
+		.fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				alert(error.reason);
+			}
+	);
+	}
 
 function logout(complete){
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
@@ -235,7 +299,11 @@ function logout(complete){
     	sessionStorage.removeItem("api");
     	sessionStorage.removeItem("auth-token");
     	complete();
-  	}).fail(function(){});
+  	}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
 }
 
 function deleteUserFromEvent(uri, complete){
@@ -249,9 +317,30 @@ function deleteUserFromEvent(uri, complete){
     }).done(function(data) { 
     	console.log("user borrado del evento");
     	complete();
-  	}).fail(function(){});
+  	}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
 }
 
+function deleteUserFromGroup(uri, complete){
+	var authToken = JSON.parse(sessionStorage["auth-token"]);
+	$.ajax({
+    	type: 'DELETE',
+   		url: uri,
+    	headers: {
+        	"X-Auth-Token":authToken.token
+    	}
+    }).done(function(data) { 
+    	console.log("user borrado del evento");
+    	complete();
+  	}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
+}
 
 function getCurrentUserProfile(complete){
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
@@ -261,7 +350,11 @@ function getCurrentUserProfile(complete){
 			user.links = linksToMap(user.links);
 			complete(user);
 		})
-		.fail(function(){});
+		.fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
 }
 
 function getProfile(uri, complete){
@@ -271,7 +364,11 @@ function getProfile(uri, complete){
 			console.log("el done funciona correctamente");
 			complete(user);
 		})
-		.fail(function(){});
+		.fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
 }
 
 function loadEventos(uri, complete){
@@ -282,11 +379,15 @@ function loadEventos(uri, complete){
 			eventos.links = linksToMap(eventos.links);
 			complete(eventos);
 		})
-		.fail(function(){});
+		.fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
 }
 
 function getEvent(eventid, complete){
-	var uri = "http://localhost:8080/walka/events/"+eventid;
+	var uri = "http://localhost:8087/walka/events/"+eventid;
 	console.log(uri);
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
 	$.ajax({
@@ -302,9 +403,12 @@ function getEvent(eventid, complete){
 			event.links = linksToMap(event.links);
 			
 			$('#eventparty').val(event.links.addUser.uri);
+			$('#deleteeventparty').val(event.links.deleteUser.uri);
+			
 		 	     
 			$.each(event.participants.users,function(i,user){
 				//$('#trParticipants tbody').append($("<td></td>")
+			
 				$('#participantes tr:last').after('<tr id="'+user.id+'"><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" rel="'+user.id+'" srel="'+event.links.deleteUser.uri+user.loginid+'"><i class="glyphicon glyphicon-trash icon-white"></i> Eliminar</a></td></tr>');
 				
 				//$("#trParticipants tbody").html('<tr><td> NO me pinta nada esta cosa'+user.fullname+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" href="#"><i class="glyphicon glyphicon-minus-sign"></i>Eliminar</a></td></tr>');
@@ -324,7 +428,47 @@ function getEvent(eventid, complete){
 			});
 }
 
-		
+function getGroup(groupid, complete){
+	var uri = "http://localhost:8087/walka/groups/"+groupid;
+	console.log(uri);
+	var authToken = JSON.parse(sessionStorage["auth-token"]);
+	$.ajax({
+    	type: 'GET',
+   		url: uri,
+    	headers: {
+        	"X-Auth-Token":authToken.token
+    	}
+    }).done(function(group){
+      		console.log("me voy a tables, tirará el get?");
+    		console.log("pinto el objeto evento desde getGruoup");
+    		console.log(group);
+			group.links = linksToMap(group.links);
+			
+			$('#groupparty').val(group.links.inviteuser.uri);
+			$('#deletegroupparty').val(group.links.deleteUser.uri);
+			
+		 	     
+			$.each(group.components.users,function(i,user){
+				//$('#trParticipants tbody').append($("<td></td>")
+			
+				$('#participantes tr:last').after('<tr id="'+user.id+'"><td>'+user.fullname+'</td><td>'+user.loginid+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" rel="'+user.id+'" srel="'+group.links.deleteUser.uri+user.loginid+'"><i class="glyphicon glyphicon-trash icon-white"></i> Eliminar</a></td></tr>');
+				
+				//$("#trParticipants tbody").html('<tr><td> NO me pinta nada esta cosa'+user.fullname+'</td><td class="center">'+user.email+'</td><td class="center"><a class="btn btn-danger" href="#"><i class="glyphicon glyphicon-minus-sign"></i>Eliminar</a></td></tr>');
+				//$("#spanPart").append('uno más');
+				console.log(user.fullname);
+				console.log(user.email);
+			});
+
+			console.log("estoy en la funcion getgroup:");
+			console.log(group.name);
+			complete();
+			
+		}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
+}		
 
 function addUserToEvent(uri, loginid, complete){
 		var authToken = JSON.parse(sessionStorage["auth-token"]);
@@ -347,8 +491,29 @@ function addUserToEvent(uri, loginid, complete){
 		);
 }
 
+function addUserToGroup(uri, loginid, complete){
+		var authToken = JSON.parse(sessionStorage["auth-token"]);
+		console.log("esta es la uri de addUserToGroup");
+		console.log(uri);
+		var data = {loginuser: loginid}
+		$.ajax(
+			{
+				type: 'POST',
+				url: uri,
+				headers: {'X-Auth-Token':authToken.token},
+				crossDomain : true,
+				data: data
+			}).done(function(user){
+				complete(user);
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				alert(error.reason);
+			}
+		);
+}
+
 function deleteEvent(idev, complete){
-	var uri = "http://localhost:8080/walka/events/"+idev;
+	var uri = "http://localhost:8087/walka/events/"+idev;
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
 	$.ajax({
     	type: 'DELETE',
@@ -360,7 +525,11 @@ function deleteEvent(idev, complete){
   		window.location.replace('calendar.html');
   		console.log("se ha borrado correctamente");
     	complete();
-  	}).fail(function(){});
+  	}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
 }
 
 function updateUser(uri, data, complete){

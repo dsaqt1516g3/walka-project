@@ -67,11 +67,9 @@
     <script>
 		$(document).ready(function(){
 		
-		$("#addUsersRow").hide();
-		$("#divform-addPar").hide();
+		$("#addUsersRow2").hide();
+		$("#divform-addPar2").hide();
 });
-
-
  
  $(document).on('click', "a.btn", function(e) {
   e.preventDefault();
@@ -80,21 +78,13 @@
   var uri = $(this).attr('srel');
   console.log(id);
   console.log(uri);
-  deleteUserFromEvent(uri,function(){ 
+  deleteUserFromGroup(uri,function(){ 
    	$(id).remove(); 
    }); 
 });
 </script>
   
 </head>
-<script type="text/javascript">
-jQuery(function(){
-	jQuery("#color-picker1").hexColorPicker();
-  	jQuery(".color-picker").hexColorPicker({
-		"container":"dialog",
-	});
-});
-</script>
 <body>
     <!-- topbar starts -->
     <div class="navbar navbar-default" role="navigation">
@@ -182,52 +172,30 @@ jQuery(function(){
 
 
 <!-- start Probando 2ndo form -->
-<div class="row" id="createEventRow">
+<div class="row" id="createGroupRow">
     <div class="box col-md-12">
         <div class="box-inner">
             <div class="box-header well" data-original-title="">
-                <h2><i class="glyphicon glyphicon-edit"></i> Crear evento</h2>
+                <h2><i class="glyphicon glyphicon-edit"></i> Crear grupo</h2>
 
             </div>
             <div class="box-content">
-            <div id="divform-create-event">
-                <form role="form" id="form-create-event">
+            <div id="divform-create-group">
+                <form role="form" id="form-create-group">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Título del evento:</label>
-                        <input type="text" class="form-control" id="ceTitle" placeholder="Introduzca el título del evento">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Ubicación:</label>
-                        <input type="text" class="form-control" id="ceLocation" placeholder="Introduzca la ubicación del evento (cuanto más específico mejor saldrá en google maps)">
+                        <label for="exampleInputEmail1">Nombre del grupo:</label>
+                        <input type="text" class="form-control" id="cgTitle" placeholder="Introduzca el título del evento">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Descripción:</label>
-                        <textarea class="form-control" id="ceDescription"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Etiqueta:</label>
-                        <input type="text" class="form-control" id="ceTag" placeholder="Introduzca una etiqueta">
-                    </div>                    
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Fecha de inicio (formato: YYYY-MM-DD HH:MM:SS):</label>
-                        <input type="text" class="form-control" id="datetime" placeholder="Introduzca la fecha y la hora de inicio">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Fecha de finalización (formato: YYYY-MM-DD HH:MM:SS):</label>
-                        <input type="text" class="form-control" id="datetime2" placeholder="Introduzca la fecha y la hora de finalización">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Color del evento:</label>
-                        <input type="text" class="form-control" id="color-picker1"/>
-                    </div>
-
-                    <button type="submit" class="btn btn-default">Crear evento</button>
+                        <textarea class="form-control" id="cgDescription"></textarea>
+                    </div>                 
+                    <button type="submit" class="btn btn-default">Crear grupo</button>
                 </form>
                 </div>
-                <div id="divform-addPar">
-                <form role="form" id="form-addPar">
-                	<input type="hidden" id="eventid" value="">
+                <div id="divform-addPar2">
+                <form role="form" id="form-addPar2">
+                	<input type="hidden" id="groupid" value="">
                     <button type="submit" class="btn btn-default">Añadir Participantes</button>
                 </form>
 				</div>
@@ -245,31 +213,20 @@ jQuery(function(){
 <!-- end Probando 2ndo form -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-<div class="row" id="addUsersRow">
+<div class="row" id="addUsersRow2">
     <div class="box col-md-12">
         <div class="box-inner">
             <div class="box-header well" data-original-title="">
-                <h2><i class="glyphicon glyphicon-edit"></i>Añadir participantes</h2>
+                <h2><i class="glyphicon glyphicon-edit"></i> Invitar participantes</h2>
 
             </div>
             <div class="box-content">
-                <form role="form" id="form-addParty">
+                <form role="form" id="form-addParty2">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Añadir participantes:</label>
-                        <input type="hidden" id="eventparty" value="">
-                        <input type="hidden" id="deleteeventparty" value="">
-                        <input type="text" class="form-control" id="party" placeholder="Introduzca el loginid del usuario">
+                        <label for="exampleInputEmail1">Invitar participantes:</label>
+                        <input type="hidden" id="groupparty" value="">
+                        <input type="hidden" id="deletegroupparty" value="">
+                        <input type="text" class="form-control" id="gparty" placeholder="Introduzca el loginid del usuario">
                     </div>
 
                     <button type="submit" class="btn btn-default">Añadir</button>
@@ -379,30 +336,6 @@ jQuery(function(){
 
 </body>
 <script src="jquery.datetimepicker.full.js"></script>
-<script>
-$.datetimepicker.setLocale('es');
-
-$('#datetimepicker_format').datetimepicker({value:'2015-04-15 05:03', format: $("#datetimepicker_format_value").val()});
-$("#datetimepicker_format_change").on("click", function(e){
-	$("#datetimepicker_format").data('xdsoft_datetimepicker').setOptions({format: $("#datetimepicker_format_value").val()});
-});
-$("#datetimepicker_format_locale").on("change", function(e){
-	$.datetimepicker.setLocale($(e.currentTarget).val());
-});
-$('#datetime').datetimepicker({
-	format:'Y-m-d H:i:s',
-	formatDate:'Y-m-d',
-	lang:'es'
-});
-
-$('#datetime2').datetimepicker({
-	format:'Y-m-d H:i:s',
-	formatDate:'Y-m-d',
-	lang:'es'
-});
-
-
-</script>
 
 </html>
 
