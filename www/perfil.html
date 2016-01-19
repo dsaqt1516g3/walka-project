@@ -16,10 +16,10 @@
         ===
     -->
     <meta charset="utf-8">
-    <title>Free HTML5 Bootstrap Admin Template</title>
+    <title>Perfil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
-    <meta name="author" content="Muhammad Usman">
+    <meta name="description" content="Walka, stress.">
+    <meta name="author" content="Marta Couto, Sergio González & Andreas Luca">
 
     <!-- The styles -->
     <link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet">
@@ -108,7 +108,7 @@
 					user.city  = $("#inputCity").val();
 					user.phonenumber  = $("#inputPhone").val();
 					
-					var uri = "http://localhost:8087/walka/users/"+$("#hiddenID").val();
+					var uri = "http://147.83.7.204:8087/walka/users/"+$("#hiddenID").val();
 					
 					updateUser(uri,user,function(){
 						console.log("editado correctamente");
@@ -135,7 +135,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"> 
+            <a class="navbar-brand" href="calendar.html"> 
                 <span style="color: white; font-size: 16pt; font-family: 'Open Sans', sans-serif;"> Walka</span></a>
 
             <!-- user dropdown starts -->
@@ -180,7 +180,8 @@
                         <li><a class="ajax-link" href="calendar.html"><i class="glyphicon glyphicon-calendar"></i><span> Calendario</span></a></li>
                         <li><a class="ajax-link" href="createevent.html"><i class=" glyphicon glyphicon-pencil"></i><span> Crear Evento</span></a></li>
                         <li><a class="ajax-link" href="creargrupo.html"><i class="glyphicon glyphicon-random"></i><span> Crear Grupo</span></a></li>
-                        <li><a class="ajax-link" href="grid.html"><i class="glyphicon glyphicon-info-sign"></i><span> Invitaciones</span></a></li>
+                        <li><a class="ajax-link" href="invitations.html"><i class="glyphicon glyphicon-bullhorn"></i><span> Invitaciones</span></a></li>
+                        <li><a class="ajax-link" href="groups.html"><i class="glyphicon glyphicon-folder-open"></i><span> Mis grupos</span></a></li>
                     </ul>
                 </div>
             </div>
@@ -245,14 +246,6 @@
             <div class="box-header well">
                 <h2><i class="glyphicon glyphicon-info-sign"></i> Editar Perfil</h2>
 
-                <div class="box-icon">
-                    <a href="#" class="btn btn-setting btn-round btn-default"><i
-                            class="glyphicon glyphicon-cog"></i></a>
-                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
-                            class="glyphicon glyphicon-chevron-up"></i></a>
-                    <a href="#" class="btn btn-close btn-round btn-default"><i
-                            class="glyphicon glyphicon-remove"></i></a>
-                </div>
             </div>
             <div class="box-content row">
                 <div class="col-md-12">

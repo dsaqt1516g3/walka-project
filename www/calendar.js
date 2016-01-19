@@ -1,4 +1,4 @@
-var BASE_URI="http://192.168.1.33:8087/walka";
+var BASE_URI="http://192.168.1.38:8087/walka";
 
 function linksToMap(links){
 	var map = {};
@@ -106,7 +106,9 @@ $("#form-addPar").submit(function(event) {
  	event.preventDefault();
  	//$('#trParticipants').append($("<td></td>");
 	eventid = $("#eventid").val();
-	getEvent(eventid, function(){
+	getEvent(eventid, function(event){
+	console.log("muestro id dentro de event de getevent");
+	console.log(event);
   	console.log("el complete del get event");
   	$("#createEventRow").hide();
     $("#addUsersRow").show(); 
@@ -163,11 +165,18 @@ $("#prof").click(function(event) {
   	console.log("Has clicado a hashtag profile");
   	console.log($('#prof').attr('rel'));
   	window.location.replace('perfil.html');
-  	var uri = "http://localhost:8087/walka/users/"+$("#prof").attr("rel");
+  	var uri = "http://147.83.7.204:8087/walka/users/"+$("#prof").attr("rel");
   	sessionStorage["tes"] = uri;
   	console.log("console log del session sotrage");
   	console.log(sessionStorage["tes"]);
 
+});
+
+$("#lout").click(function(event) {
+ 	event.preventDefault();
+  	logout(function(){
+  		window.location.replace('index.html');
+  	});  
 });
 
 /*
@@ -237,7 +246,7 @@ function register(logini, fullname, email, password, country, city, phone, compl
 }
 
 function createEvent(event, complete){
-		var uri = "http://localhost:8087/walka/events";
+		var uri = "http://147.83.7.204:8087/walka/events";
 		var authToken = JSON.parse(sessionStorage["auth-token"]);
 		//console.log(authToken.token);
 		//var data = JSON.stringify(event);
@@ -298,6 +307,8 @@ function logout(complete){
     }).done(function(data) { 
     	sessionStorage.removeItem("api");
     	sessionStorage.removeItem("auth-token");
+    	sessionStorage.removeItem("tes");
+    	sessionStorage.removeItem("tesi");
     	complete();
   	}).fail(function(jqXHR, textStatus, errorThrown){
 				var error = jqXHR.responseJSON;
@@ -387,7 +398,7 @@ function loadEventos(uri, complete){
 }
 
 function getEvent(eventid, complete){
-	var uri = "http://localhost:8087/walka/events/"+eventid;
+	var uri = "http://147.83.7.204:8087/walka/events/"+eventid;
 	console.log(uri);
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
 	$.ajax({
@@ -405,7 +416,8 @@ function getEvent(eventid, complete){
 			$('#eventparty').val(event.links.addUser.uri);
 			$('#deleteeventparty').val(event.links.deleteUser.uri);
 			
-		 	     
+		 	console.log("Hola Andreas como estas? Hay X participantes");
+		 	console.log(event.participants.users.length);    
 			$.each(event.participants.users,function(i,user){
 				//$('#trParticipants tbody').append($("<td></td>")
 			
@@ -419,7 +431,7 @@ function getEvent(eventid, complete){
 
 			console.log("estoy en la funcion getevent:");
 			console.log(event.title);
-			complete();
+			complete(event);
 			
 		}).fail(function(jqXHR, textStatus, errorThrown){
 				var error = jqXHR.responseJSON;
@@ -429,7 +441,7 @@ function getEvent(eventid, complete){
 }
 
 function getGroup(groupid, complete){
-	var uri = "http://localhost:8087/walka/groups/"+groupid;
+	var uri = "http://147.83.7.204:8087/walka/groups/"+groupid;
 	console.log(uri);
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
 	$.ajax({
@@ -513,7 +525,27 @@ function addUserToGroup(uri, loginid, complete){
 }
 
 function deleteEvent(idev, complete){
-	var uri = "http://localhost:8087/walka/events/"+idev;
+	var uri = "http://147.83.7.204:8087/walka/events/"+idev;
+	var authToken = JSON.parse(sessionStorage["auth-token"]);
+	$.ajax({
+    	type: 'DELETE',
+    	headers: {
+        	"X-Auth-Token":authToken.token
+    	},
+   		url: uri
+    }).done(function(data) { 
+  		window.location.replace('calendar.html');
+  		console.log("se ha borrado correctamente");
+    	complete();
+  	}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				console.log("AQUI EL ERROR");
+				alert(error.reason);
+			});
+}
+
+function leaveEvent(uri, complete){
+	//var uri = "http://147.83.7.204:8087/walka/events/"+idev;
 	var authToken = JSON.parse(sessionStorage["auth-token"]);
 	$.ajax({
     	type: 'DELETE',
@@ -554,5 +586,29 @@ function updateUser(uri, data, complete){
 				alert(error.reason);
 			}
 		);
+}
 
+function updateEvent(uri, data, complete){
+		//var data = JSON.stringify(data);
+		var authToken = JSON.parse(sessionStorage["auth-token"]);
+		console.log(uri);
+		$.ajax(
+			{
+				url: uri,
+				type : 'PUT',
+				headers: {
+        		"X-Auth-Token":authToken.token,
+       			"Content-Type": 'application/vnd.dsa.walka.event+json' 
+    			},
+				crossDomain : true,
+				dataType : 'json',
+				data: JSON.stringify(data)
+			}).done(function(event){
+				alert("Evento actualizado correctamente");
+				complete(event);
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				alert(error.reason);
+			}
+		);
 }

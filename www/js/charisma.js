@@ -315,7 +315,7 @@ $("editarButton").click(function(event) {
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'month'
         },
         events: {
         url: uri,
@@ -369,19 +369,24 @@ $("editarButton").click(function(event) {
 			$("#popParticipants").append('</ul>');
 			$("#footerEdit").text('');
 			//$("#footerEdit").html('<a href="editevent.html" class="btn btn-primary" id="popDeleteLink">Eliminar</a>');
-			$("#footerEdit").html('<form id="editarEvento"><button type="submit" class="btn btn-primary">Editar</button></form>');
+			$("#footerEdit").html('<form id="editarEvento"><button type="submit" class="btn btn-success">Editar</button></form>');
 			if(authToken.userid === event.creator){
 				$("#footer").text('');
-				$("#footer").html('<form id="eliminarEvento"><button type="submit" class="btn btn-primary">Eliminar</button></form>');
+				$("#footer").html('<form id="eliminarEvento"><button type="submit" class="btn btn-danger">Eliminar</button></form>');
+			}else{
+			if(authToken.userid != event.creator)
+			$("#footer").text('');
+			$("#footer").html('<form id="leaveEvent"><button type="submit" class="btn btn-danger">Abandonar</button></form>');
 			}
 			$("#popParticipants").on("click", ".perf", function(e){
 				e.preventDefault();
 				console.log("esto pilla del rel de cada partiicpante");
-				console.log("http://localhost:8087/walka/users/"+$(this).attr('rel'));	  	
-  				var uri = "http://localhost:8087/walka/users/"+$(this).attr('rel');
+				console.log("http://147.83.7.204:8087/walka/users/"+$(this).attr('rel'));	  	
+  				var uri = "http://147.83.7.204:8087/walka/users/"+$(this).attr('rel');
   				sessionStorage["tes"] = uri;
   				window.location.replace('perfil.html');
 			});
+			event.links = linksToMap(event.links);
 			$("#eliminarEvento").submit(function(e) {
 				e.preventDefault();
 				deleteEvent(event.id,function(){
@@ -389,9 +394,23 @@ $("editarButton").click(function(event) {
 				});
 			});
 			
+			$("#leaveEvent").submit(function(e) {
+				e.preventDefault();
+				var uri = event.links.leaveEvent.uri;
+				leaveEvent(uri,function(){
+  				console.log("que si que se ha borrado");	
+				});
+			});
+			
+			//event.links = linksToMap(event.links);
+			
 			$("#editarEvento").submit(function(e) {
 				e.preventDefault();
-				
+				//var uri = event["links"]["edit-event"].uri;
+				//console.log("esta es la uri del evento a editarasdfasfd");
+				//console.log(uri);
+				sessionStorage["tesi"] = event.id;
+				window.location.replace('editevent.html');		
 			});
 			
 			//$("#popParticipants").append('</ul>');	
