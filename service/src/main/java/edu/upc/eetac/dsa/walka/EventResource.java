@@ -86,6 +86,8 @@ public class EventResource {
            if(!eventDAO.checkUserInEvent(id,userid))
               throw new ForbiddenException("No estas en el evento");
 
+            event.setColor(eventDAO.getColour(id,userid));
+
 
             // Calculate the ETag on last modified date of user resource
             EntityTag eTag = new EntityTag(Long.toString(event.getLastModified()));
