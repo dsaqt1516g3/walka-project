@@ -273,6 +273,54 @@ public class EventDAOImpl implements EventDAO {
         return eventCollection;
     }
 
+    @Override
+    public EventCollection getEventsWeek(String iduser, String weekDay) throws SQLException {
+        EventCollection eventCollection = new EventCollection();
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        UserCollectionDAO userDAO = new UserCollectionDAOImpl();
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(EventDAOQuery.GET_EVENTS_BY_WEEK);
+            stmt.setString(1, iduser);
+            stmt.setString(2, weekDay);
+            stmt.setString(3, weekDay);
+
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event();
+
+                event.setId(rs.getString("id"));
+                event.setTitle(rs.getString("title"));
+                event.setCreator(rs.getString("creator"));
+                event.setLocation(rs.getString("location"));
+                /**Obtengo participantes de otra clase*/
+                UserCollection participants = userDAO.getParticipantsByEventId(event.getId());
+                event.setParticipants(participants);
+                event.setStart(rs.getString("startdate"));
+                event.setEnd(rs.getString("enddate"));
+                event.setNotes(rs.getString("notes"));
+                event.setTag(rs.getString("tag"));
+                event.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                event.setLastModified(rs.getTimestamp("last_modified").getTime());
+                PropertyResourceBundle prb = (PropertyResourceBundle) ResourceBundle.getBundle("walka");
+                String baseURI = prb.getString("walka.eventsurl");
+                String eventurl = baseURI + "/" + rs.getString("id");
+                event.setUrl(eventurl);
+                eventCollection.getEvents().add(event);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return eventCollection;
+    }
 
     @Override
     public EventCollection getEventsBetween(String iduser, String start, String end) throws SQLException {

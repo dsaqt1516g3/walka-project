@@ -27,5 +27,6 @@ public interface EventDAO {
     public boolean modifyColour(String colour, String idevent, String iduser) throws SQLException;
     public boolean eventIsFull(String idevent) throws SQLException;
     public EventCollection searchEvents(String keyword, String iduser) throws SQLException;
+    public EventCollection getEventsWeek(String iduser, String weekDay) throws SQLException;
 
 }

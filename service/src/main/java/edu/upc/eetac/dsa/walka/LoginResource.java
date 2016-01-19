@@ -26,7 +26,7 @@ public class LoginResource {
     @Produces(WalkaMediaType.WALKA_AUTH_TOKEN)
     public AuthToken login(@FormParam("login") String loginid, @FormParam("password") String password) {
         if(loginid == null || password == null)
-            throw new BadRequestException("All parameters are mandatory");
+            throw new BadRequestException("Introduce todos los campos");
 
         User user = null;
         AuthToken authToken = null;
@@ -34,9 +34,9 @@ public class LoginResource {
             UserDAO userDAO = new UserDAOImpl();
             user = userDAO.getUserByLoginid(loginid);
             if(user == null)
-                throw new BadRequestException("Loginid " + loginid + " not found.");
+                throw new BadRequestException("El usuario " + loginid + " no existe");
             if(!userDAO.checkPassword(user.getId(), password))
-                throw new BadRequestException("Incorrect password");
+                throw new BadRequestException("Contraseña incorrecta");
 
             AuthTokenDAO authTokenDAO = new AuthTokenDAOImpl();
             authTokenDAO.deleteToken(user.getId());

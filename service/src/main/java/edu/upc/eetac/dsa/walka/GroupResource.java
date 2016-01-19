@@ -25,7 +25,7 @@ public class GroupResource {
     @Produces(WalkaMediaType.WALKA_GROUP)
     public Response createGroup(@FormParam("name") String name, @FormParam("description") String description, @Context UriInfo uriInfo) throws URISyntaxException {
         if (name == null )
-            throw new BadRequestException("Name is mandatory");
+            throw new BadRequestException("El nombre es obligatorio");
         GroupDAO groupDAO = new GroupDAOImpl();
 
         Group group = null;
@@ -74,13 +74,13 @@ public class GroupResource {
 
 
             if (group == null)
-                throw new NotFoundException("Group with id = " + id + "not found");
+                throw new NotFoundException("Group with = " + id + "not found");
 
             //Si no pertenece al grupo, no puede obtenerlo
 
 
             if(!groupDAO.checkUserInGroup(id, userid))
-                throw new ForbiddenException("You are not in the group");
+                throw new ForbiddenException("No formas parte del grupo");
 
 
             // Calculate the ETag on last modified date of user resource
@@ -149,7 +149,7 @@ public class GroupResource {
 
             if(!groupDAO.checkUserInGroup(id, userid))
 
-                throw new ForbiddenException("You are not in the group");
+                throw new ForbiddenException("No formas parte del grupo");
             System.out.println(group.getName());
             group = groupDAO.updateGroup(group.getId(), group.getName(), group.getDescription());
 
@@ -182,10 +182,10 @@ public class GroupResource {
                 throw new NotFoundException("Group with id = " + id + "not found");
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("You are not the creator");
+                throw new ForbiddenException("No eres el creador");
 
             if (!groupDAO.deleteGroup(group.getId()))
-                throw new NotFoundException("Couldn't delete group:  " + id);
+                throw new NotFoundException("No se pudo borrar el grupo: " + id);
 
         } catch (SQLException e) {
             throw new InternalServerErrorException();
@@ -213,23 +213,23 @@ public class GroupResource {
             System.out.println(creator);
 
             if (userDAO.getUserByLoginid(userlogin) == null)
-                throw new NotFoundException("User with login = " + userlogin + " doesn't exists");
+                throw new NotFoundException("El usuario " + userlogin + " no existe, prueba de nuevo");
 
             user = userDAO.getUserByLoginid(userlogin);
             System.out.println(user.getLoginid());
 
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("Only the creator can invite people to group");
+                throw new ForbiddenException("Lo sentimos, solo el creador del grupo puede invitar participantes");
 
             if(groupDAO.groupIsFull(id))
-                throw new ForbiddenException("Group is full");
+                throw new ForbiddenException("El grupo esta lleno");
 
             if(groupDAO.checkUserInGroup(id, user.getId()))
-                throw new ForbiddenException("The user is already in the group");
+                throw new ForbiddenException("El usuario que se quiere invitar ya forma parte del grupo");
 
             if(groupDAO.checkUserInInvitation(id, user.getId()))
-                throw new ForbiddenException("The user is already invited. Waiting for confirmation...");
+                throw new ForbiddenException("Usuario ya invitado. A la espera de confirmacion...");
             System.out.println(id);
             System.out.println(user.getId());
             if(!groupDAO.inviteUserToGroup(id, user.getId()))
@@ -293,7 +293,7 @@ public class GroupResource {
             System.out.println("1");
 
             if(groupDAO.checkUserInGroup(id,userid))
-                throw new ForbiddenException("You are already in the group");
+                throw new ForbiddenException("Ya formas parte del grupo");
 
             System.out.println("2");
 
@@ -391,7 +391,7 @@ public class GroupResource {
                 throw new ForbiddenException("You are not in the group");
 
             if (userid.equals(creator))
-                throw new ForbiddenException("Cannot leave the group if you are the creator. Delete it");
+                throw new ForbiddenException("No puedes dejar el evento si eres su creador. En todo caso, borralo");
 
             if(!groupDAO.deleteUserFromGroup(id, userid))
                 throw new NotFoundException("Couldn't leave event:  " + id);
@@ -432,10 +432,13 @@ public class GroupResource {
                 user = userDAO.getUserByLoginid(loginuser);
 
             if(!groupDAO.checkUserInGroup(id,user.getId()))
-                throw new NotFoundException("The user is not in the group");
+                throw new NotFoundException("El usuario no esta en el grupo");
+
+            if(userid.equals(user.getId()))
+                throw new ForbiddenException("No puede salir del grupo si eres el creador");
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("Only the creator can delete participants");
+                throw new ForbiddenException("Solo el creador del grupo puede echar a miembros");
 
 
             if (!groupDAO.deleteUserFromGroup(id,user.getId()))

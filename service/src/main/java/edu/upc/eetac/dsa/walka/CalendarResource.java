@@ -39,7 +39,7 @@ public class CalendarResource {
         }
         return eventCollection;
 
-    //Obtener por dia
+
     }
 
     @Path("/between")
@@ -51,9 +51,28 @@ public class CalendarResource {
         String userid = securityContext.getUserPrincipal().getName();
 
         try {
-            eventCollection = eventDAO.getEventsBetween(userid,startD,endD);
+            eventCollection = eventDAO.getEventsBetween(userid, startD, endD);
             eventCollection.setFromDate(startD);
             eventCollection.setToDate(endD);
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return eventCollection;
+    }
+
+    @Path("/week")
+    @GET
+    @Produces(WalkaMediaType.WALKA_EVENT_COLLECTION)
+    public EventCollection getEventsWeek(@QueryParam("weekdate") String weekday){
+
+        EventCollection eventCollection;
+        EventDAO eventDAO = new EventDAOImpl();
+        String userid = securityContext.getUserPrincipal().getName();
+
+        try {
+            eventCollection = eventDAO.getEventsWeek(userid,weekday);
+            eventCollection.setFromDate(weekday);
+            eventCollection.setToDate("Interval 1 week");
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }

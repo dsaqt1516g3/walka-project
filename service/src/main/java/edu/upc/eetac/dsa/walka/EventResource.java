@@ -24,8 +24,10 @@ public class EventResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(WalkaMediaType.WALKA_EVENT)
     public Response createEvent(@FormParam("title") String title, @FormParam("location") String location, @FormParam("notes") String notes, @FormParam("start") String start,@FormParam("end") String end, @FormParam("tag") String tag , @FormParam("colour") String colour, @Context UriInfo uriInfo) throws URISyntaxException {
-            if (title == null ||  start == null )
-                throw new BadRequestException("Title, start and end date are mandatory");
+            if (title == null ||  start == null || end == null )
+                throw new BadRequestException("Titulo y fechas son obligatorias");
+
+
             EventDAO eventDAO = new EventDAOImpl();
 
             Event event  = null;
@@ -82,7 +84,7 @@ public class EventResource {
             //Si no pertenece al evento, no puede obtenerlo
 
            if(!eventDAO.checkUserInEvent(id,userid))
-              throw new ForbiddenException("You are not in the event");
+              throw new ForbiddenException("No estas en el evento");
 
 
             // Calculate the ETag on last modified date of user resource
@@ -132,7 +134,7 @@ public class EventResource {
 
 
             if(!eventDAO.checkUserInEvent(id, userid))
-                throw new ForbiddenException("You are not in the event");
+                throw new ForbiddenException("No formas parte del evento.");
             System.out.println(event.getTitle());
             System.out.println(event.getColor());
 
@@ -173,7 +175,7 @@ public class EventResource {
                 throw new NotFoundException("Event with id = " + id + "not found");
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("You are not the creator");
+                throw new ForbiddenException("No puedes borrar el evento si no eres el creador");
 
             if (!eventDAO.deleteEvent(event.getId()))
                 throw new NotFoundException("Couldn't delete event:  " + id);
@@ -206,7 +208,7 @@ public class EventResource {
                 throw new ForbiddenException("You are not in the event");
 
             if (userid.equals(creator))
-                throw new ForbiddenException("Cannot leave the event if you are the creator. Delete it");
+                throw new ForbiddenException("No puedes dejar el evento si eres su creador.  Puedes borrarlo si así lo deseas");
 
             if (!eventDAO.LeaveEvent(userid, id))
                 throw new NotFoundException("Couldn't leave event:  " + id);
@@ -242,13 +244,13 @@ public class EventResource {
                 throw new NotFoundException("User with login = " + userlogin + " doesn't exists");
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("Only the creator can add participants");
+                throw new ForbiddenException("Solo el creador puede añadir participantes");
 
             if(eventDAO.checkUserInEvent(id, user.getId()))
-                throw new ForbiddenException("The user is already in the event");
+                throw new ForbiddenException("El usuario ya forma parte  del evento");
 
            if(eventDAO.eventIsFull(id))
-              throw new ForbiddenException("Event is full");
+              throw new ForbiddenException("Evento lleno");
 
             if (!eventDAO.JoinEvent(user.getId(), id))
                 throw new NotFoundException("Couldn't add participant to event: " + id);
@@ -290,11 +292,14 @@ public class EventResource {
             if (event == null)
                 throw new NotFoundException("Event with id = " + id + " not found");
 
+            if(iduserTodelete.equals(userid))
+                throw new ForbiddenException("No puedes eliminarte si eres el creador");
+
             if(!eventDAO.checkUserInEvent(id, userid))
                 throw new ForbiddenException("You are not in the event");
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("Only the creator can delete participants");
+                throw new ForbiddenException("Solo el creador puede borrar participantes");
 
             if (!eventDAO.LeaveEvent(iduserTodelete, id))
                 throw new NotFoundException("Couldn't delete participant with id: " + id);
@@ -359,10 +364,10 @@ public class EventResource {
             group = groupDAO.getGroupbyId(groupid);
 
             if (!userid.equals(creator))
-                throw new ForbiddenException("Only the creator can add participants or share the event with groups");
+                throw new ForbiddenException("Solo el creador puede compartir este evento");
 
             if(!groupDAO.checkUserInGroup(groupid,userid))
-                throw new ForbiddenException("You are not in the group, so you can't share the event");
+                throw new ForbiddenException("No formas parte de dicho grupo");
 
             if(eventDAO.eventIsFull(eventid))
                 throw new ForbiddenException("Event is full");

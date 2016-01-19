@@ -15,8 +15,10 @@ import java.util.List;
 public class Group {
     @InjectLinks({
             @InjectLink(value = "/groups/{id}/leave", style = InjectLink.Style.ABSOLUTE, rel = "leavegroup", title = "Leave group", bindings = @Binding(name = "id", value = "${instance.id}")),
-            @InjectLink(value = "/groups/{id}/participant/add", style = InjectLink.Style.ABSOLUTE, rel = "inviteuser", title = "Invite user", bindings = @Binding(name = "id", value = "${instance.id}")),
-            @InjectLink(value = "/groups/{id}/participant/del/", style = InjectLink.Style.ABSOLUTE, rel = "deleteUser", title = "Delete user from group", bindings = @Binding(name = "id", value = "${instance.id}"))
+            @InjectLink(value = "/groups/{id}/invite", style = InjectLink.Style.ABSOLUTE, rel = "inviteuser", title = "Invite user", bindings = @Binding(name = "id", value = "${instance.id}")),
+            @InjectLink(value = "/groups/{id}/deleteuser/", style = InjectLink.Style.ABSOLUTE, rel = "deleteUser", title = "Delete user from group", bindings = @Binding(name = "id", value = "${instance.id}")),
+            @InjectLink(value = "/groups/{id}", style = InjectLink.Style.ABSOLUTE, rel = "edit-delete-self", title = "Edit Delete Self", bindings = @Binding(name = "id", value = "${instance.id}"))
+
     })
     private List<Link> links;
     private String id;
