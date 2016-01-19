@@ -1,0 +1,63 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="10dp">
+    <TextView
+        android:id="@+id/textViewSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Subject"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:textStyle="bold"
+        android:layout_margin="10dp"
+        android:textSize="16dp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data comienzo"
+        android:id="@+id/start_date"
+        android:layout_below="@+id/textViewSubject"
+        android:layout_marginLeft="60dp"
+        android:textSize="14dp"
+        android:textColor="@color/black"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data finalizacion"
+        android:id="@+id/end_date"
+        android:layout_marginLeft="60dp"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:layout_below="@+id/start_date" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hour comienzo"
+        android:id="@+id/start_hour"
+        android:layout_toRightOf="@+id/start_date"
+        android:layout_alignBaseline="@+id/start_date"
+        android:layout_marginLeft="30dp"
+        android:textSize="14dp"
+        android:textColor="@color/black"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hour finalización"
+        android:id="@+id/end_hour"
+        android:layout_marginLeft="30dp"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/end_date"
+        android:layout_alignBaseline="@+id/end_date"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/clock"
+        android:paddingTop="50dp"
+        android:paddingLeft="5dp"/>
+</RelativeLayout>

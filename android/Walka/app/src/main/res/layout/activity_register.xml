@@ -41,13 +41,10 @@
                 android:padding="15dip"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/lUsername"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Username"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/Username"
                     android:layout_width="fill_parent"
@@ -56,15 +53,13 @@
                     android:layout_marginTop="5dip"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:hint="username"/>
+                    android:hint="Username"/>
 
-                <TextView
-                    android:id="@+id/IUname"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                </android.support.design.widget.TextInputLayout>
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/Name"
                     android:layout_width="fill_parent"
@@ -73,15 +68,12 @@
                     android:layout_marginTop="5dip"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:hint="Name Surname"/>
+                    android:hint="Nombre y apellidos"/>
+            </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/IUemail"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Email "
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>/>
-
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/email"
                     android:layout_width="fill_parent"
@@ -89,15 +81,15 @@
                     android:layout_marginTop="5dip"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
-                    android:hint="user@walka.com"
+                    android:hint="Email"
                     android:layout_marginBottom="20dip"
                     />
-                <TextView
-                    android:id="@+id/lPassword"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Password"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>/>
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/etPassword"
@@ -107,17 +99,15 @@
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:password="true"
-                    android:hint="******"
+                    android:hint="Contraseña"
                     android:layout_marginBottom="20dip"
                     />
+                </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/lPassword2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Repeat Password"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>/>
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/etPassword2"
                     android:layout_width="fill_parent"
@@ -126,10 +116,10 @@
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:password="true"
-                    android:hint="********"
+                    android:hint="Repatir contraseña"
                     android:layout_marginBottom="20dip"
                     />
-
+                </android.support.design.widget.TextInputLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

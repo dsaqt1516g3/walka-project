@@ -24,11 +24,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Events"
+            android:name=".CalendarActivity"
             android:label="@string/title_activity_events"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity android:name=".RegisterActivity" >
+        </activity>
+        <activity
+            android:name=".EventDetailActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".NewEventActivity"
+            android:label="@string/title_activity_new_event"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".UserDetailsActivity"
+            android:label="@string/title_activity_user_details"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".CalendarWeekActivity"
+            android:label="@string/title_activity_calendar_weel"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

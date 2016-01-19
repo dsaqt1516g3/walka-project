@@ -10,11 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -72,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void attemptRegister(){
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         if (mAuthTask != null) {
             return;
         }
@@ -132,6 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView = mUsernameView;
             cancel = true;
         }
+
         if (cancel) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
@@ -225,7 +224,7 @@ public class RegisterActivity extends AppCompatActivity {
             showProgress(false);
             Log.d(TAG, "ha entrado en postexecute");
             if(user.getLoginSuccesful() == true){
-                startActivity(new Intent(RegisterActivity.this, Events.class));
+                startActivity(new Intent(RegisterActivity.this, CalendarActivity.class));
             }
             else{
                 if(user.getLoginid() == null){
@@ -238,6 +237,10 @@ public class RegisterActivity extends AppCompatActivity {
                     mPasswordView.requestFocus();
                     focusView = mPasswordView;
 
+                    //TODO: cuando te registras = inicias sesión en el calendar
+
+                    //TODO: no poder volver atrás
+
                 }
             }
 
@@ -245,8 +248,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            Log.d(TAG, "cancelled y peto");
             mAuthTask = null;
             showProgress(false);
+
         }
     }
 }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    tools:context="edu.upc.eetac.dsa.walka.CalendarWeekActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/menu"
+        android:background="@color/blue"
+        >
+
+        <ImageButton
+            android:layout_marginTop="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/actual"
+            android:background="@null"
+            android:clickable="true"
+            android:src="@drawable/month"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="50dp"
+            />
+        <ImageButton
+            android:layout_marginTop="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/week"
+            android:background="@null"
+            android:clickable="true"
+            android:src="@drawable/star"
+            android:layout_toRightOf="@+id/actual"
+            android:layout_marginLeft="50dp"
+            />
+        <ImageButton
+            android:layout_marginTop="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/user"
+            android:background="@null"
+            android:clickable="true"
+            android:src="@drawable/person"
+            android:layout_toRightOf="@+id/week"
+            android:layout_marginLeft="50dp"
+            />
+        <ImageButton
+            android:layout_marginTop="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout"
+            android:background="@null"
+            android:clickable="true"
+            android:src="@drawable/exit"
+            android:layout_toRightOf="@+id/user"
+            android:layout_marginLeft="50dp"
+            />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/tvmes"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Próximos eventos"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:typeface="monospace"/>
+        <TextView
+            android:id="@+id/tveventos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textStyle="italic"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="87dp"
+            android:layout_below="@+id/tvmes"
+            android:layout_centerHorizontal="true" />
+        <ListView
+            android:id="@+id/listdays"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="50dp"
+            />
+        </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/add_event"/>
+
+</android.support.design.widget.CoordinatorLayout>

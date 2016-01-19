@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    tools:context="edu.upc.eetac.dsa.walka.EventDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/bar">
+        <EditText
+            android:id="@+id/Subject"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:gravity="center_vertical"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:hint="Asunto del evento"
+            android:textColorHint="@color/white"/>
+    </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/fabok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="85dp"
+        app:layout_anchor="@id/bar"
+        app:layout_anchorGravity="bottom|end"
+        android:src="@drawable/tick" />
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/fabdel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        app:layout_anchor="@id/bar"
+        app:layout_anchorGravity="bottom|end"
+        android:src="@drawable/cross" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="160dp"
+        app:paddingStart="80dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/clock"
+                android:paddingTop="20dp"
+                android:paddingLeft="30dp"/>
+            <TextView
+                android:id="@+id/tvstart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha de inicio"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <Button
+                android:id="@+id/startdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tvstart"
+                android:text="Día"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="60dp"
+                android:onClick="showDatePickerDialogStart"
+                />
+            <TextView
+                android:id="@+id/StartDateText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="date"
+                android:layout_below="@id/tvstart"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:id="@+id/tvend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha de finalización"
+                android:layout_below="@id/StartDateText"
+                android:paddingTop="10dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/enddate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Día"
+                android:layout_marginTop="0dp"
+                android:onClick="showDatePickerDialogEnd"
+                android:layout_below="@+id/StartDateText"
+                android:layout_toRightOf="@+id/tvend"
+                android:layout_marginLeft="20dp" />
+            <TextView
+                android:id="@+id/EndDateText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="date"
+                android:paddingTop="20dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:layout_below="@+id/tvend"
+                android:layout_alignRight="@+id/startdate"
+                android:layout_alignEnd="@+id/startdate" />
+            <TextView
+                android:id="@+id/tvhour1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora de inicio"
+                android:layout_below="@id/EndDateText"
+                android:paddingTop="10dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <Button
+                android:id="@+id/starthour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora"
+                android:layout_marginLeft="20dp"
+                android:onClick="showHourPickerDialogStart"
+                android:layout_below="@+id/EndDateText"
+                android:layout_toRightOf="@+id/tvend"
+                android:layout_toEndOf="@+id/tvend" />
+
+            <TextView
+                android:id="@+id/StartHourText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tvhour1"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                />
+            <TextView
+                android:id="@+id/tvhour2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora de finalización"
+                android:layout_below="@id/StartHourText"
+                android:paddingTop="10dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <Button
+                android:id="@+id/endhour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora"
+                android:onClick="showHourPickerDialogEnd"
+                android:layout_below="@+id/StartHourText"
+                android:layout_alignLeft="@+id/starthour"
+                android:layout_alignStart="@+id/starthour" />
+
+            <TextView
+                android:id="@+id/EndHourText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tvhour2"
+                android:paddingTop="10dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ubicacion"
+                android:paddingTop="280dp"
+                android:paddingLeft="30dp"/>
+            <EditText
+                android:id="@+id/ubicacion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/EndHourText"
+                android:inputType="text"
+                android:hint="Ubicación"
+                android:paddingTop="25dp"
+                android:paddingLeft="90dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#"
+                android:textSize="30dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:paddingTop="340dp"
+                android:paddingLeft="40dp"/>
+            <EditText
+                android:id="@+id/tag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/ubicacion"
+                android:inputType="text"
+                android:hint="tag"
+                android:paddingTop="25dp"
+                android:paddingLeft="90dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/description"
+                android:paddingTop="410dp"
+                android:paddingLeft="30dp"/>
+            <EditText
+                android:id="@+id/notes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tag"
+                android:inputType="text"
+                android:hint="Información sobre el evento"
+                android:paddingTop="35dp"
+                android:paddingLeft="90dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

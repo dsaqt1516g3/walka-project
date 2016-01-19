@@ -26,6 +26,7 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'org.glassfish.jersey.core:jersey-client:2.22.1'
     compile 'com.google.code.gson:gson:2.5'
+
 }
 
 configurations {

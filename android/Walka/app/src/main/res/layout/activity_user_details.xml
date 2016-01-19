@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="edu.upc.eetac.dsa.walka.CalendarActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="30dp"
+            android:textStyle="italic"
+            android:paddingLeft="30dp"
+            android:paddingTop="50dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentTop="true"/>
+
+        <android.support.design.widget.FloatingActionButton android:id="@+id/fabdel"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            app:layout_anchorGravity="bottom|end" android:src="@drawable/cross"
+            android:layout_below="@+id/header"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="5dp"/>
+
+        <android.support.design.widget.FloatingActionButton android:id="@+id/fabok"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            app:layout_anchorGravity="bottom|end"
+            android:src="@drawable/tick"
+            android:layout_marginRight="10dp"
+            android:layout_alignTop="@+id/fabdel"
+            android:layout_toLeftOf="@+id/fabdel"
+            android:layout_toStartOf="@+id/fabdel" />
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="129dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/person"
+                android:paddingTop="20dp"
+                android:paddingLeft="30dp"/>
+            <TextView
+                android:id="@+id/FullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre completo"
+                android:paddingTop="10dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/nombre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:hint="name"
+                android:layout_below="@id/FullName"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/mail"
+                android:paddingTop="90dp"
+                android:paddingLeft="30dp"/>
+            <TextView
+                android:id="@+id/tvemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:inputType="textEmailAddress"
+                android:layout_below="@id/nombre"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tvemail"
+                android:inputType="textEmailAddress"
+                android:hint="user@walka.com"
+                android:paddingTop="5dp"
+                android:paddingLeft="90dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ubicacion"
+                android:paddingTop="170dp"
+                android:paddingLeft="30dp"/>
+            <TextView
+                android:id="@+id/country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="País"
+                android:layout_below="@id/email"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/pais"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/country"
+                android:inputType="text"
+                android:hint="España"
+                android:paddingTop="5dp"
+                android:paddingLeft="90dp" />
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ciudad"
+                android:layout_below="@id/pais"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/ciudad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/city"
+                android:inputType="text"
+                android:hint="Castelldefels"
+                android:paddingTop="5dp"
+                android:paddingLeft="90dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/phone"
+                android:paddingTop="330dp"
+                android:paddingLeft="30dp"/>
+            <TextView
+                android:id="@+id/tvphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teléfono"
+                android:layout_below="@id/ciudad"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tvphone"
+                android:inputType="phone"
+                android:hint="666666666"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/cake"
+                android:paddingTop="410dp"
+                android:paddingLeft="30dp"/>
+            <TextView
+                android:id="@+id/tvcumple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha de nacimiento"
+                android:layout_below="@id/phone"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/cumple"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tvcumple"
+                android:inputType="date"
+                android:hint="dd/mm/aaaa"
+                android:paddingTop="15dp"
+                android:paddingLeft="90dp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
