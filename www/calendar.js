@@ -1,4 +1,4 @@
-var BASE_URI="http://192.168.1.38:8087/walka";
+var BASE_URI="http://http://147.83.7.204:8087/walka";
 
 function linksToMap(links){
 	var map = {};
@@ -143,6 +143,18 @@ $("#form-addParty").submit(function(event) {
 	 });
 });
 
+$("#form-addParty3").submit(function(event) {
+ 	event.preventDefault();
+ 	console.log("estoy en el log party de gruposss");
+	var eventid = $("#eventparty5").val();
+	var uri = "http://192.168.1.38:8087/walka/events/"+eventid+"/sharewithgroup";
+	var groupid = $("#selectGroup").val();
+	
+	addGroupToEvent(uri, groupid, function(){
+	console.log("GRUUPO kasdfkadfka añadiendo usuario");
+});
+});
+
 $("#form-addParty2").submit(function(event) {
  	event.preventDefault();
  	console.log("estoy en el log party numer 2");
@@ -171,6 +183,33 @@ $("#prof").click(function(event) {
   	console.log(sessionStorage["tes"]);
 
 });
+
+/*
+$("#adInvi").submit(function(event) {
+ 	event.preventDefault();
+ 	console.log("entro aquí?");
+	var uri = $(".btn").attr("rel");
+	console.log(uri);
+	acceptRefuse(uri, function(group){
+	if(group)
+  	console.log("acceptada");
+  	else
+  	console.log("rechazada");
+  	window.location.replace('calendar.html');
+ 	
+}); });
+
+
+    console.log("entro aquí?");
+	var uri = $(".btn").attr("rel");
+	console.log(uri);
+	acceptRefuse(uri, function(group){
+	if(group)
+  	console.log("acceptada");
+  	else
+  	console.log("rechazada");
+  	window.location.replace('calendar.html');
+*/
 
 $("#lout").click(function(event) {
  	event.preventDefault();
@@ -269,6 +308,26 @@ function createEvent(event, complete){
 			}
 	);
 	}
+
+function acceptRefuse(uri, complete){
+		var authToken = JSON.parse(sessionStorage["auth-token"]);
+		$.ajax(
+			{
+				type: 'POST',
+				url: uri,
+				headers: {'X-Auth-Token':authToken.token},
+				crossDomain : true
+			}).done(function(){
+			complete();
+		})
+		.fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				alert(error.reason);
+			}
+	);
+	}
+	
+
 	
 function createGroup(group, complete){
 		var authToken = JSON.parse(sessionStorage["auth-token"]);
@@ -368,6 +427,24 @@ function getCurrentUserProfile(complete){
 			});
 }
 
+function getCurrentInvitations(complete){
+	var authToken = JSON.parse(sessionStorage["auth-token"]);
+	var uri = authToken["links"]["checkinvitations"].uri;
+			$.ajax(
+			{
+				type: 'GET',
+				url: uri,
+				headers: {'X-Auth-Token':authToken.token},
+				crossDomain : true
+			}).done(function(data){
+				complete(data);
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				alert(error.reason);
+			}
+		);
+}
+
 function getProfile(uri, complete){
 	$.get(uri)
 		.done(function(user){
@@ -380,6 +457,25 @@ function getProfile(uri, complete){
 				console.log("AQUI EL ERROR");
 				alert(error.reason);
 			});
+}
+
+
+function getGroups(complete){
+	var authToken = JSON.parse(sessionStorage["auth-token"]);
+	var uri = BASE_URI+"/groups";
+			$.ajax(
+			{
+				type: 'GET',
+				url: uri,
+				headers: {'X-Auth-Token':authToken.token},
+				crossDomain : true
+			}).done(function(group){
+				complete(group);
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				alert(error.reason);
+			}
+		);
 }
 
 function loadEventos(uri, complete){
@@ -415,6 +511,8 @@ function getEvent(eventid, complete){
 			
 			$('#eventparty').val(event.links.addUser.uri);
 			$('#deleteeventparty').val(event.links.deleteUser.uri);
+			
+			$('#eventparty5').val(event.id);
 			
 		 	console.log("Hola Andreas como estas? Hay X participantes");
 		 	console.log(event.participants.users.length);    
@@ -496,6 +594,29 @@ function addUserToEvent(uri, loginid, complete){
 				data: data
 			}).done(function(user){
 				complete(user);
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				var error = jqXHR.responseJSON;
+				alert(error.reason);
+			}
+		);
+}
+
+function addGroupToEvent(uri, groupid, complete){
+		var authToken = JSON.parse(sessionStorage["auth-token"]);
+		console.log("esta es la uri de addGroupToEvent kljnasdfknjalsdfa");
+		console.log(uri);
+		var data = {groupid: groupid}
+		$.ajax(
+			{
+				type: 'POST',
+				url: uri,
+				headers: {'X-Auth-Token':authToken.token},
+				crossDomain : true,
+				data: data
+			}).done(function(){
+			console.log("TODOOO CORRECTOOO");
+			alert("grupo añadido correctamente");
+				complete();
 			}).fail(function(jqXHR, textStatus, errorThrown){
 				var error = jqXHR.responseJSON;
 				alert(error.reason);
