@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <!--
         ===
@@ -16,7 +16,7 @@
         ===
     -->
     <meta charset="utf-8">
-    <title>Inicio</title>
+    <title>Crear grupo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Walka, stress.">
     <meta name="author" content="Marta Couto, Sergio González & Andreas Luca">
@@ -42,7 +42,6 @@
     <!-- jQuery -->
     <script src="bower_components/jquery/jquery.min.js"></script>
 
-
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -51,8 +50,41 @@
     <!-- The fav icon -->
     <link rel="shortcut icon" href="img/favicon.ico">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:800' rel='stylesheet' type='text/css'>
-</head>
+    
 
+
+<!--Color picker-->
+  <script src="jquery-hex-colorpicker.js"></script>
+  <link rel="stylesheet" href="jquery-hex-colorpicker.css" />
+  
+<!-- DateTime picker-->
+<link rel="stylesheet" type="text/css" href="jquery.datetimepicker.css"/>
+
+<!-- Textarea
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script>tinymce.init({ selector:'textarea' });</script> -->
+
+    <script>
+		$(document).ready(function(){
+		
+		$("#addUsersRow2").hide();
+		$("#divform-addPar2").hide();
+});
+ 
+ $(document).on('click', "a.btn", function(e) {
+  e.preventDefault();
+  console.log("se hace el click y este es el id:");
+  var id = "#"+$(this).attr('rel');
+  var uri = $(this).attr('srel');
+  console.log(id);
+  console.log(uri);
+  deleteUserFromGroup(uri,function(){ 
+   	$(id).remove(); 
+   }); 
+});
+</script>
+  
+</head>
 <body>
     <!-- topbar starts -->
     <div class="navbar navbar-default" role="navigation">
@@ -117,7 +149,6 @@
         </div>
         <!--/span-->
         <!-- left menu ends -->
-
         <noscript>
             <div class="alert alert-block col-md-12">
                 <h4 class="alert-heading">Warning!</h4>
@@ -129,68 +160,134 @@
 
         <div id="content" class="col-lg-10 col-sm-10">
             <!-- content starts -->
-                <div>
-        <ul class="breadcrumb">
-            <li>
-                <a href="#">Principal</a>
-            </li>
-            <li>
-                <a href="#">Calendario</a>
-            </li>
-        </ul>
-    </div>
-
-    <div class="row">
-        <div class="box col-md-12">
-            <div class="box-inner">
-                <div class="box-header well" data-original-title="">
-                    <h2><i class="glyphicon glyphicon-calendar"></i> Calendario</h2>
-                </div>
-                <div class="box-content">
+            <div>
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Principal</a>
+        </li>
+        <li>
+            <a href="#">Crear Evento</a>
+        </li>
+    </ul>
+</div>
 
 
-                    <div id="calendar"></div>
+<!-- start Probando 2ndo form -->
+<div class="row" id="createGroupRow">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-edit"></i> Crear grupo</h2>
 
-                    <div class="clearfix"></div>
-                </div>
             </div>
+            <div class="box-content">
+            <div id="divform-create-group">
+                <form role="form" id="form-create-group">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nombre del grupo:</label>
+                        <input type="text" class="form-control" id="cgTitle" placeholder="Introduzca el título del evento">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Descripción:</label>
+                        <textarea class="form-control" id="cgDescription"></textarea>
+                    </div>                 
+                    <button type="submit" class="btn btn-default">Crear grupo</button>
+                </form>
+                </div>
+                <div id="divform-addPar2">
+                <form role="form" id="form-addPar2">
+                	<input type="hidden" id="groupid" value="">
+                    <button type="submit" class="btn btn-default">Añadir Participantes</button>
+                </form>
+				</div>
+            </div>
+            
+            
         </div>
-    </div><!--/row-->
+            
+    </div>
+        
+    <!--/span-->
+
+</div><!--/row-->
+
+<!-- end Probando 2ndo form -->
+
+
+<div class="row" id="addUsersRow2">
+    <div class="box col-md-12">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-edit"></i> Invitar participantes</h2>
+
+            </div>
+            <div class="box-content">
+                <form role="form" id="form-addParty2">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Invitar participantes:</label>
+                        <input type="hidden" id="groupparty" value="">
+                        <input type="hidden" id="deletegroupparty" value="">
+                        <input type="text" class="form-control" id="gparty" placeholder="Introduzca el loginid del usuario">
+                    </div>
+
+                    <button type="submit" class="btn btn-default">Añadir</button>
+                </form>
+
+            </div>
+            
+            
+            
+	        <div class="box-content">
+				<table class="table table-striped table-bordered responsive" id="participantes">
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!--<tr>
+                            <td>Andreas Luca</td>
+                            <td class="center">andreasluca</td>
+                            <td class="center">andreas@luca.com</td>
+                            <td class="center">
+                                <a class="btn btn-danger" href="#">
+                                    <i class="glyphicon glyphicon-trash icon-white"></i>
+                                	Eliminar
+                                </a>
+                            </td>
+                        </tr>-->
+                        </tbody>
+                    </table>
+            </div>
+            
+            
+            
+        </div>
+            
+    </div>
+        
+    <!--/span-->
+
+</div><!--/row-->
+
+
+
+
+
+
+
+
+
+
 
     <!-- content ends -->
     </div><!--/#content.col-md-0-->
 </div><!--/fluid-row-->
 
-
     <hr>
-
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-
-        <div class="modal-dialog">
-            <div class="modal-content" id="masterdiv">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h3><span id="popTitle"></span></h3>
-                    <h6 align="left"><span id="popCreator"></span></h6><hr>
-					<h6 align="right"><span id="popLocation"></span></h6>
-					<h6 align="right"><span id="popDate"></span></h6>
-                </div>
-                <div class="modal-body">
-                    <span id="popEvent"></span> 
-                    
-                     
-                    <span id="popParticipants"></span>
-                    
-                </div>
-                <div class="modal-footer">
-                	<p><span id="footerEdit"></span><br><span id="footer"></span></p>
-                    <!--<a href="#" class="btn btn-default" data-dismiss="modal" id="popEditLink">Editar</a>-->
-                    
-                </div>
-            </div>
-        </div>
-    </div>
 
     <footer class="row">
         <p class="col-md-9 col-sm-9 col-xs-12 copyright">&copy; <a href="https://github.com/dsaqt1516g3/walka-project" target="_blank">DSA grup 3: Marta, Sergio & Andreas</p>
@@ -199,19 +296,18 @@
 
 </div><!--/.fluid-container-->
 
-<!-- external javascript -->
 
 <script type="text/javascript" src="calendar.js"></script>
 
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- external javascript -->
 
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <!-- library for cookie management -->
 <script src="js/jquery.cookie.js"></script>
 <!-- calender plugin -->
 <script src='bower_components/moment/min/moment.min.js'></script>
-<script src='bower_components/fullcalendar/dist/fullcalendar.js'></script>
-<script src='bower_components/fullcalendar/dist/lang/es.js'></script>
+<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
 <!-- data table plugin -->
 <script src='js/jquery.dataTables.min.js'></script>
 
@@ -240,4 +336,7 @@
 
 
 </body>
+<script src="jquery.datetimepicker.full.js"></script>
+
 </html>
+
